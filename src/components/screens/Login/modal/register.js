@@ -6,7 +6,8 @@ import {
   useTheme, 
   useMediaQuery, 
   Typography,
-  Button
+  Button,
+  Box
 } from "@mui/material";
 
 import { BootstrapDialog, BootstrapDialogTitle } from "../../../ourComponents/Modals";
@@ -23,6 +24,8 @@ import { ValidateEmail } from "../dialog";
 
 import { CREATEVALIDATECODE } from "../../../requires/api.require";
 import { useLazyQuery, useMutation } from "@apollo/client";
+
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
 const RegisterScreen = (props) => {
   const [validateCode, {loading, error}] = useMutation(CREATEVALIDATECODE)
@@ -84,11 +87,18 @@ const RegisterScreen = (props) => {
     <>
       <BootstrapDialog open={open} fullWidth={true} maxWidth="md" >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} >
-          <Typography >
-            <b>
+          <Box
+            sx={{
+              display: "inline-flex"
+            }}
+          >
+            <Typography
+              fontSize="1em"
+            >
               Cadastro de Usuário
-            </b>
-          </Typography>
+            </Typography>
+            <PersonOutlineIcon sx={{ fontSize: "1.3em", ml: "0.2em" }} />
+          </Box>
         </BootstrapDialogTitle>
         <DialogContent>
           <>

@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 import campo from '../../../Images/campo.png';
+import login from '../../../Images/login.png'
 
 import UserForm from "./userForm";
 
@@ -21,47 +22,41 @@ const Login = (props) => {
       sx={{
         margin:0, 
         padding:0,
+        backgroundImage: `url(${login})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        height:"100vh",
+        maxWidth: "100%"
+        // display: { xs:"none", sm:"block" }
       }}
     >
       <Grid 
         item 
-        sm={8} 
-        sx={{
-          backgroundImage: `url(${campo})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          height:"100vh",
-          display: { xs:"none", sm:"block" }
-        }} 
-      >
-      </Grid>
-      <Grid 
-        item 
         xs={12}
-        sm={4} 
         sx={{
           height: {xs: "105vh", sm: "100vh"} ,
-          bgcolor:"#79a59c"
+          // bgcolor:"#79a59c"
         }} 
       >
         <Grid 
           container 
           spacing={2} 
-          justifyContent="center" 
+          justifyContent="flex-end" 
           alignItems="center"
           sx={{
             height:"100vh",
+            // bgcolor:"pink"
           }} 
         >
           <Grid 
-            item xs={8} 
+            item xs={4.5} 
             textAlign="center" 
             sx={{
-              bgcolor:"snow", 
+              // bgcolor:"snow", 
               borderRadius:"8px",
-              height:"auto",
-              boxShadow: "51px 32px 19px 14px rgba(0,0,0,0.1)"
+              // height:"auto",
+              // boxShadow: "51px 32px 19px 14px rgba(0,0,0,0.1)",
             }}
           >
             <UserForm 

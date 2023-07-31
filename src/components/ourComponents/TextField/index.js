@@ -22,7 +22,7 @@ const Textfield = ({ name, setError, ...otherProps }) => {
         ...field,
         ...otherProps,
         fullWidth: true,
-        variant: "outlined",
+        variant: "standard",
         onChange: handleChange,
     };
 
