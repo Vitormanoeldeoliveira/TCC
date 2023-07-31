@@ -11,7 +11,7 @@ import campo from '../../../Images/campo.png';
 
 import UserForm from "./userForm";
 
-const Login = () => {
+const Login = (props) => {
   return(
     <Grid
       container 
@@ -34,8 +34,8 @@ const Login = () => {
           height:"100vh",
           display: { xs:"none", sm:"block" }
         }} 
-      ></Grid>
-
+      >
+      </Grid>
       <Grid 
         item 
         xs={12}
@@ -64,7 +64,10 @@ const Login = () => {
               boxShadow: "51px 32px 19px 14px rgba(0,0,0,0.1)"
             }}
           >
-            <UserForm />
+            <UserForm 
+              userId={props.userId}
+              setUserId={props.setUserId}
+            />
           </Grid>
         </Grid>
       </Grid>

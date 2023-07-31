@@ -16,24 +16,70 @@ import * as Yup from "yup";
 import RegisterScreen from "./modal/register";
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { useLazyQuery } from "@apollo/client";
+
+import { LOGIN_USER } from "../../requires/api.require";
+import ScreenToken from "./token";
 
 const UserForm = () => {
+  const [loginUser, {loading, error}] = useLazyQuery(LOGIN_USER)
+
   const [formValues, setFormValues] = useState({
+    id: "",
+    nome: "",
     email:"",
-    senha:""
+    senha:"",
+    campoErro: false,
   });
 
-  const [passwordView, setPasswordView] = useState(false)
+  const [passwordView, setPasswordView] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const validation = Yup.object().shape({
     email: Yup.string().email("Preencha corretamente").required("Campo obrigatório"),
     senha: Yup.string().required("Campo obrigatório"),
   });
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleSubmit = (values) => {
+  const userValidate = async (values) => {
+    const data = await loginUser({
+      variables: {
+        filters: {
+          email: values.email,
+          senha: values.senha
+        }
+      }
+    }).then((data) => {
+      if(data.data) {
+        if(data.data.login) {
+          return data.data.login.token;
+        } else { 
+          return false 
+        }
+      } else { return false }
+    })
     
+    return data;
+  }
+
+  const handleSubmit = async (values) => {
+    
+    setFormValues((formValues) => ({
+      ...formValues,
+      email: values.email,
+      senha: values.senha
+    }))
+    
+    const verifyRealUser = await userValidate(values);
+    localStorage.setItem('token', verifyRealUser);
+    if(verifyRealUser) {
+      window.location.href = "/plantations"
+    } else {
+      setFormValues((formValues) => ({
+        ...formValues,
+        campoErro: true
+      }))
+    }
   }
   
   return(
@@ -82,6 +128,9 @@ const UserForm = () => {
                   label="Email" 
                   fullWidth
                   size="small"
+                  error={formValues.campoErro}
+                  setError={setFormValues}
+                  helperText={formValues.campoErro ? "Email ou senha estão incorretos" : ""}
                   sx={{
                     ml:"-1em"
                   }}
@@ -95,6 +144,9 @@ const UserForm = () => {
                   label="Senha"
                   fullWidth
                   size="small"
+                  error={formValues.campoErro}
+                  setError={setFormValues}
+                  helperText={formValues.campoErro ? "Email ou senha estão incorretos" : ""}
                   sx={{
                     ml:"-1em"
                   }}

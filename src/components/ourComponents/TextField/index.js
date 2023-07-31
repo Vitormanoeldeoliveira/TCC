@@ -9,6 +9,12 @@ const Textfield = ({ name, setError, ...otherProps }) => {
    const [field, meta] = useField(name);
 
    const handleChange = (event) => {
+      if(otherProps.error){
+         setError({
+            [otherProps.error]: false
+         })
+      }
+
       const data = event.target.value;
       return setFieldValue(name, data);
    };

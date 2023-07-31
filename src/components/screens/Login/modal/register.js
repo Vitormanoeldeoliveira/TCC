@@ -19,25 +19,19 @@ import { Form, Formik } from "formik";
 
 import Textfield from "../../../ourComponents/TextField";
 
-import { useMutation, gql } from '@apollo/client';
+import { ValidateEmail } from "../dialog";
 
-const ADD_USER = gql`
-  mutation Mutation($user: UserCreateInput!) {
-  createUser(user: $user) {
-    id
-    nome
-    email
-    senha
-  }
-}
-`
+import { CREATEVALIDATECODE } from "../../../requires/api.require";
+import { useLazyQuery, useMutation } from "@apollo/client";
 
 const RegisterScreen = (props) => {
-  const [addUser, { loading, error }] = useMutation(ADD_USER);
+  const [validateCode, {loading, error}] = useMutation(CREATEVALIDATECODE)
 
   const {setOpenModal} = props;
 
   const [open, setOpen] = useState(false)
+
+  const [ dialogOpen, setDialogOpen ] = useState(false)
 
   useEffect(() => {
     setOpen(true);
@@ -53,7 +47,10 @@ const RegisterScreen = (props) => {
   const [formValues, setFormValues] = useState({
     nome:"",
     email:"",
-    senha:""
+    senha:"",
+    campoErro: false,
+    validade: false,
+    valido: ""
   });
 
   const validation = Yup.object().shape({
@@ -65,27 +62,22 @@ const RegisterScreen = (props) => {
   const [passwordView, setPasswordView] = useState(false)
 
   const handleSubmit = async(values) => {
-    const { nome, email, senha } = values;
+    const { data } = await validateCode({
+      variables: {
+        data: {
+          email: values.email,
+          verifyCode: true
+        }
+      }
+    })
 
-    const UserCreateInput = {
-      nome,
-      email,
-      senha,
-    };
-
-    try {
-      const { data } = await addUser({
-        variables: { user: UserCreateInput },
-      });
-      
-      console.log('Novo usuário adicionado:', data.create);
-
-      // Limpar o formulário ou redirecionar para outra página, se necessário
-    } catch (error) {
-      console.error('Erro ao adicionar usuário:', error);
-    }
-
-    handleClose()
+    setFormValues({
+      ...formValues,
+      ...values,
+      valido: data,
+    })
+    
+    setDialogOpen(true)
   };
 
   return(
@@ -122,7 +114,10 @@ const RegisterScreen = (props) => {
                       size="small"
                       fullWidth
                       label="Email"
-                      autoComplete="off"                   
+                      autoComplete="off"
+                      error={formValues.campoErro}
+                      setError={setFormValues}
+                      helperText={formValues.campoErro ? "Email já cadastrado" : ""}                
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -164,6 +159,16 @@ const RegisterScreen = (props) => {
           </>
         </DialogContent>
       </BootstrapDialog>
+            {dialogOpen && (
+              <ValidateEmail 
+                setOpenDialog={setDialogOpen}
+                openDialog={dialogOpen}
+                validadeValue={formValues}
+                setValidadeValue={setFormValues}
+                modalControl={open}
+                setModalControl={setOpenModal}
+              /> 
+            )}
     </>
   );
 };
