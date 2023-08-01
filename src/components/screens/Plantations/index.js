@@ -4,6 +4,8 @@ import { autoDecodeToken } from "../Login/token/decodeToken";
 import { useEffect } from "react";
 import { Card, CardContent, Grid, Typography } from "@mui/material";
 
+import { Navbar } from "../../ourComponents/Navbar";
+
 const Plantations = () => {
   const decodedToken = autoDecodeToken();
   
@@ -18,8 +20,9 @@ const Plantations = () => {
 
   return(
     <>
+      <Navbar />
       <Grid container alignItems="center" justifyContent="center" >
-        <Grid 
+        {/* <Grid 
           item 
           xs={3}
           sx={{
@@ -53,7 +56,7 @@ const Plantations = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
         {
           data?.getAllPlantations?.length === 0 ?
           (

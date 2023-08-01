@@ -73,8 +73,8 @@ const UserForm = () => {
     }))
     
     const verifyRealUser = await userValidate(values);
-    localStorage.setItem('token', verifyRealUser);
     if(verifyRealUser) {
+      localStorage.setItem('token', verifyRealUser);
       window.location.href = "/plantations"
     } else {
       setFormValues((formValues) => ({
