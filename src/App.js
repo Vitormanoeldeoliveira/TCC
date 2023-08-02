@@ -5,6 +5,11 @@ import Plantations from "./components/screens/Plantations";
 import { useState } from "react";
 import { autoDecodeToken } from "./components/screens/Login/token/decodeToken";
 import { BadRequest } from "./components/screens/errorRequest";
+import { UserConfig } from "./components/screens/UserConfig";
+import { AboutUs } from "./components/screens/AboutUs";
+import { Documentation } from "./components/screens/Documentation";
+import { SystemConfig } from "./components/screens/SystemConfig";
+import { UserConfigWithBg } from "./components/screens/UserConfig/bgColor";
 
 const client = new ApolloClient({
   uri: 'http://localhost:3090/graphql', // Substitua pela URL da sua API GraphQL
@@ -30,6 +35,34 @@ const App = () => {
             element={
               decodedToken?.id ? 
               <Plantations /> : <BadRequest />
+            } 
+          />
+          <Route 
+            path="/userConfig" 
+            element={ 
+              decodedToken?.id ? 
+              <UserConfigWithBg /> : <BadRequest />
+            } 
+          />
+          <Route 
+            path="/aboutUs" 
+            element={
+              decodedToken?.id ? 
+              <AboutUs /> : <BadRequest />
+            } 
+          />
+          <Route 
+            path="/documentation" 
+            element={
+              decodedToken?.id ?
+              <Documentation /> : <BadRequest />
+            } 
+          />
+          <Route 
+            path="/systemConfig" 
+            element={ 
+              decodedToken?.id ? 
+              <SystemConfig /> : <BadRequest />
             } 
           />
         </Routes>

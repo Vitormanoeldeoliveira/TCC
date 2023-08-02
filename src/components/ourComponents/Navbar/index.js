@@ -18,7 +18,7 @@ import Engrenagem from '../../../Images/engrenagem.png'
 
 import AvatarFlower from '../../../Images/Avatar/flower.png'
 
-const pages = ['Plantações', 'Sobre', 'Início'];
+const pages = ['Plantações', 'Sobre', 'Documentação'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export const Navbar = () => {
@@ -34,11 +34,26 @@ export const Navbar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = (props) => {
-    const value = props.target.value
+  const handleCloseNavMenu = (ev) => {
+    const value = ev
 
-    if(value == 'AvarMedium') {
-      window.location.href = 'http://localhost:3000'
+    console.log(value);
+    
+    if(value == 'userConfig') {
+      const novaURL = 'http://localhost:3000/userConfig'
+      window.location.href = novaURL;
+    } else if(value == 'Plantações') {
+      const novaURL = 'http://localhost:3000/plantations'
+      window.location.href = novaURL;
+    } else if(value == 'Sobre'){
+      const novaURL = 'http://localhost:3000/aboutUs'
+      window.location.href = novaURL;
+    } else if(value == 'Documentação') {
+      const novaURL = 'http://localhost:3000/documentation'
+      window.location.href = novaURL;
+    } else if(value == 'systemConfig') {
+      const novaURL = 'http://localhost:3000/systemConfig'
+      window.location.href = novaURL;
     }
 
     setAnchorElNav(null);
@@ -59,12 +74,11 @@ export const Navbar = () => {
         <Toolbar disableGutters>
           {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <IconButton
-            value="AvarMedium"
             onClick={
-              (props) => handleCloseNavMenu(props)
+              () => handleCloseNavMenu("userConfig")
             } 
           >
-            <Avatar alt="Remy Sharp" src={AvatarFlower} sx={{ display: {xs: 'none', md: 'flex'} }} />
+            <Avatar alt="Remy Sharp" src={decodedToken.avatar} sx={{ display: {xs: 'none', md: 'flex'} }} />
           </IconButton>
           <Typography
             variant="h6"
@@ -116,7 +130,10 @@ export const Navbar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem 
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                >
                   <Typography 
                     textAlign="center"
                     sx={{ fontFamily: 'FontePersonalizada' }}
@@ -154,6 +171,7 @@ export const Navbar = () => {
           >
             ESTUFA
           </Typography>
+          {/* Fim do modo mobile */}
 
           <Box 
             sx={{ 
@@ -166,7 +184,7 @@ export const Navbar = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(page)}
                 
                 sx={{ 
                   my: 2, 
@@ -186,23 +204,23 @@ export const Navbar = () => {
           <Box sx={{ flexGrow: 0 }}>
             {/* <Tooltip title="Open settings"> */}
               <IconButton 
-                onClick={handleOpenUserMenu} 
+                onClick={() => handleCloseNavMenu("userConfig")} 
                 sx={{
                   p: 0,
                   display: {
-                    xs: '',
+                    xs: 'block',
                     md: 'none'
                   }
                 }}
               >
                 <Avatar 
-                  alt="Remy Sharp" 
-                  src={AvatarFlower}
-                  // onClick={handleCloseNavMenu}
+                  // alt="Remy Sharp" 
+                  src={decodedToken.avatar}
+                  // onClick={handleCloseNavMenu("userConfig")}
                 />
               </IconButton>
               <IconButton
-                onClick={handleCloseNavMenu} 
+                onClick={ () => handleCloseNavMenu("systemConfig") } 
                 sx={{
                   p: 0,
                   mt: 1,

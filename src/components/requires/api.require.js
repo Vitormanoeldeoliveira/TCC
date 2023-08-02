@@ -20,6 +20,14 @@ export const LOGIN_USER = gql `
   }
 `
 
+export const UPDATE_TOKEN = gql `
+  query UpdateLogin($filters: UserFilterInput!) {
+    updateLogin(filters: $filters) {
+      token
+    }
+  }
+`
+
 export const REAL_EMAIL = gql `
   query Query($filters: EmailValidateCreateInput!) {
     getByCode(filters: $filters) {
@@ -59,6 +67,18 @@ export const ADD_USER = gql`
       senha
     }
   }
+`
+
+export const UPDATE_USER = gql `
+  mutation UpdateUser($user: UserUpdateInput!, $updateUserId: Float!) {
+    updateUser(user: $user, id: $updateUserId) {
+      id
+      nome
+      email
+      senha
+      avatar
+    }
+}
 `
 
 //plantations query

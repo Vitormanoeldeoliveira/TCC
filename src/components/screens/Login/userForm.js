@@ -3,7 +3,8 @@ import {
   Button, 
   Grid, 
   InputAdornment, 
-  Typography 
+  Typography,
+  useMediaQuery
 } from "@mui/material";
 
 import Logo from "../../../../src/Images/logo.png";
@@ -83,6 +84,8 @@ const UserForm = () => {
       }))
     }
   }
+
+  const isMobile = useMediaQuery('(max-width: 920px)')
   
   return(
     <Grid 
@@ -92,7 +95,7 @@ const UserForm = () => {
       spacing={2}
       sx={{
         // bgcolor:"red",
-        mt: "5em"
+        mt: {md: "5em"}
       }}
     >
       {/* <Grid item xs={12}>
@@ -115,9 +118,7 @@ const UserForm = () => {
       >
         <Typography fontSize="1.5em" >Login</Typography>
       </Grid> */}
-      <Grid item xs={12} sx={{
-        // bgcolor:"lightblue"
-      }}>
+      <Grid item xs={12}>
           <Formik
             initialValues={{...formValues}}
             validationSchema={validation}
@@ -206,84 +207,148 @@ const UserForm = () => {
                     />
                   </Grid>
                 </Grid>
-                <Grid 
-                  item 
-                  xs={12}
-                  sx={{
-                    mt:"5em",
-                    ml:"-1em"
-                  }}
-                >
-                  <Button 
-                    variant="contained"
-                    type="submit"
-                    bold
+                {isMobile ? (
+                  <Grid 
+                    item 
+                    xs={12}
                     sx={{
-                      height:"3em",
-                      width: "10em",
-                      bgcolor: "#b5cfce",
-                      color: "black",
-                      fontSize: "2em",
-                      fontWeight: 800,
-                      fontFamily: 'FontePersonalizada',
-                      "&:hover": {
-                        bgcolor: "#889c9b",
-                      },
+                      textAlign: "center"
                     }}
                   >
-                    Entrar
-                  </Button>
-                </Grid>
+                    <Button 
+                      variant="contained"
+                      type="submit"
+                      sx={{
+                        mt: "5em",
+                        height:"3em",
+                        width: "10em",
+                        bgcolor: "#b5cfce",
+                        color: "black",
+                        fontSize: "1em",
+                        fontWeight: 800,
+                        fontFamily: 'FontePersonalizada',
+                        "&:hover": {
+                          bgcolor: "#889c9b",
+                        },
+                      }}
+                    >
+                      Entrar
+                    </Button>
+                  </Grid>
+                ) : (
+                  <Grid 
+                    item 
+                    xs={12}
+                    sx={{
+                      mt:"5em",
+                      ml:"-1em"
+                    }}
+                  >
+                    <Button 
+                      variant="contained"
+                      type="submit"
+                      sx={{
+                        height:"3em",
+                        width: "10em",
+                        bgcolor: "#b5cfce",
+                        color: "black",
+                        fontSize: "2em",
+                        fontWeight: 800,
+                        fontFamily: 'FontePersonalizada',
+                        "&:hover": {
+                          bgcolor: "#889c9b",
+                        },
+                      }}
+                    >
+                      Entrar
+                    </Button>
+                  </Grid>
+                )}
             </Form>
           </Formik>
       </Grid>
-      <Grid 
-        item 
-        xs={12}
-        sx={{
-          mt:"1em",
-          ml:"-1em",
-        }}
-      >
-        <Box 
+      {isMobile ? (
+        <Grid
+          item
+          xs={12}
           sx={{
-            display: "inline-flex"
+            textAlign: "center"
           }}
         >
+            <Typography 
+              fontSize="1.2em"
+              sx={{
+                cursor:"pointer",
+                fontWeight: 800,
+                fontFamily: 'FontePersonalizada',
+                "&:hover": {
+                  color: "lightblue", // Define a cor da borda quando o mouse está sobre o componente
+                },
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              Cadastre-se
+            </Typography>
           <Typography 
-            fontSize="1.2em" 
+            fontSize="1em"
             sx={{
-              fontFamily: 'FontePersonalizada',
-            }}
-          >
-            Não tem uma conta? 
-          </Typography>
-          <Typography 
-            fontSize="1.2em"
-            sx={{
-              cursor:"pointer",
+              mt: "1.5em",
               fontWeight: 800,
-              fontFamily: 'FontePersonalizada',
-              "&:hover": {
-                color: "lightblue", // Define a cor da borda quando o mouse está sobre o componente
-              },
+              fontFamily: 'FontePersonalizada'
             }}
-            onClick={() => setModalOpen(true)}
           >
-            Cadastre-se
+            by estufa <img src={plantinha} />
           </Typography>
-        </Box>
-        <Typography 
-          fontSize="1em"
+        </Grid>
+      ) : (
+        <Grid 
+          item 
+          xs={12}
           sx={{
-            mt: "1.5em",
-            fontWeight: 800,
-            fontFamily: 'FontePersonalizada'
+            mt:"1em",
+            ml:"-1em",
           }}
         >
-          by estufa <img src={plantinha} />
-        </Typography>
-      </Grid>
+          <Box 
+            sx={{
+              display: "inline-flex"
+            }}
+          >
+            <Typography 
+              fontSize="1.2em" 
+              sx={{
+                fontFamily: 'FontePersonalizada',
+              }}
+            >
+              Não tem uma conta? 
+            </Typography>
+            <Typography 
+              fontSize="1.2em"
+              sx={{
+                cursor:"pointer",
+                fontWeight: 800,
+                fontFamily: 'FontePersonalizada',
+                "&:hover": {
+                  color: "lightblue", // Define a cor da borda quando o mouse está sobre o componente
+                },
+              }}
+              onClick={() => setModalOpen(true)}
+            >
+              Cadastre-se
+            </Typography>
+          </Box>
+          <Typography 
+            fontSize="1em"
+            sx={{
+              mt: "1.5em",
+              fontWeight: 800,
+              fontFamily: 'FontePersonalizada'
+            }}
+          >
+            by estufa <img src={plantinha} />
+          </Typography>
+        </Grid>
+      )}
         {modalOpen && (
           <RegisterScreen
             setOpenModal={setModalOpen}

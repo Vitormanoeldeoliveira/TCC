@@ -27,6 +27,8 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
+import { Toaster, toast } from "react-hot-toast";
+
 const RegisterScreen = (props) => {
   const [validateCode, {loading, error}] = useMutation(CREATEVALIDATECODE)
 
@@ -169,16 +171,16 @@ const RegisterScreen = (props) => {
           </>
         </DialogContent>
       </BootstrapDialog>
-            {dialogOpen && (
-              <ValidateEmail 
-                setOpenDialog={setDialogOpen}
-                openDialog={dialogOpen}
-                validadeValue={formValues}
-                setValidadeValue={setFormValues}
-                modalControl={open}
-                setModalControl={setOpenModal}
-              /> 
-            )}
+      {dialogOpen && (
+        <ValidateEmail 
+          setOpenDialog={setDialogOpen}
+          openDialog={dialogOpen}
+          validadeValue={formValues}
+          setValidadeValue={setFormValues}
+          modalControl={open}
+          setModalControl={setOpenModal}
+        /> 
+      )}
     </>
   );
 };

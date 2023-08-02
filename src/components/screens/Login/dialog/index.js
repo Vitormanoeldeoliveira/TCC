@@ -10,6 +10,9 @@ import { useLazyQuery, useMutation } from "@apollo/client"
 import { React, useEffect, useState } from "react"
 import { Formik, Form } from "formik"
 
+import flower from '../../../../Images/Avatar/flower.png'
+import { toast, Toaster } from "react-hot-toast";
+
 export const ValidateEmail = (props) => {
   const [emailValidation, {loading, error}] = useLazyQuery(REAL_EMAIL);
   const [addUser, { loadingUser, errorUser }] = useMutation(ADD_USER);
@@ -63,18 +66,20 @@ export const ValidateEmail = (props) => {
       })
       
       const { nome, email, senha } = validadeValue;
+      const avatar = flower
 
       const UserCreateInput = {
         nome,
         email,
         senha,
+        avatar
       };
 
       try {
         const { data } = await addUser({
           variables: { user: UserCreateInput },
         });
-        console.log('Novo usuário adicionado:', data.create);
+        // toast.success("Cadastro Realizado com sucesso")
         setModalControl(false)
       } catch (error) {
         setValidadeValue({
@@ -141,6 +146,7 @@ export const ValidateEmail = (props) => {
           </Grid>
         </DialogContent>
       </BootstrapDialog>
+      <div><Toaster/></div>
     </>
   )
 }
