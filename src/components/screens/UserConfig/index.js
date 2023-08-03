@@ -4,19 +4,29 @@ import { Navbar } from "../../ourComponents/Navbar"
 import { autoDecodeToken } from "../Login/token/decodeToken";
 import { useState } from "react";
 import EditAvatar from "./Modals/EditAvatar";
+import { UpdateUser } from "./Modals/updateUser";
 
 export const UserConfig = () => {
     const decodedToken = autoDecodeToken();
 
     const [openModal, setOpenModal] = useState({
         modalEditAvatar: false,
+        modalUpdateUser: false
     });
 
     const handleChangeAvatar = () => {
         setOpenModal({
             ...openModal,
             modalEditAvatar: true
-        })
+        });
+    };
+
+    const handleChangeData = () => {
+        console.log("oi");
+        setOpenModal({
+            ...openModal,
+            modalUpdateUser: true
+        });
     }
 
     const logout = () => {
@@ -24,7 +34,7 @@ export const UserConfig = () => {
 
         const novaURL = 'http://localhost:3000'
         window.location.href = novaURL;
-    }
+    };
 
     return (
         <>
@@ -90,6 +100,7 @@ export const UserConfig = () => {
                 >
                     <Typography
                         fontSize="2em"
+                        onClick={() => handleChangeData()}
                         sx={{
                             // ml: "0.3em",
                             mt: "0.8em",
@@ -131,8 +142,15 @@ export const UserConfig = () => {
                         Sair
                     </Button>
                 </Grid>
-                {openModal && (
+                {openModal.modalEditAvatar && (
                     <EditAvatar 
+                        setOpenModal={setOpenModal}
+                        openModal={openModal}
+                    />
+                )}
+
+                {openModal.modalUpdateUser && (
+                    <UpdateUser 
                         setOpenModal={setOpenModal}
                         openModal={openModal}
                     />

@@ -35,16 +35,16 @@ import { autoDecodeToken } from "../../../Login/token/decodeToken";
 
 
 const Avatars = [
-    cloud,
-    flower,
-    girl1,
-    girl2,
-    girl3,
-    girl4,
-    man1,
-    man2,
-    man3,
-    man4,
+    {id: 1, image: cloud},
+    {id: 2, image: flower},
+    {id: 3, image: girl1},
+    {id: 4, image: girl2},
+    {id: 5, image: girl3},
+    {id: 6, image: girl4},
+    {id: 7, image: man1},
+    {id: 8, image: man2},
+    {id: 9, image: man3},
+    {id: 10, image: man4},
 ]
 
 const EditAvatar = (props) => {
@@ -80,7 +80,7 @@ const EditAvatar = (props) => {
                     nome: decodedToken.nome,
                     // senha: decodedToken.senha,
                     email: decodedToken.email,
-                    avatar: image
+                    avatar: image.image
                 },
                 updateUserId: decodedToken.id
             }
@@ -134,15 +134,14 @@ const EditAvatar = (props) => {
                         alignItems='center'
                     >
                         {Avatars.map((image) => (
-                            <Grid item xs={3} >
+                            <Grid item xs={3} key={image.id} >
                                 <IconButton
-                                    key={image}
                                     onClick={
                                         () => handleChangeAvatar(image)
                                     } 
                                 >
                                     <Avatar
-                                        src={image}
+                                        src={image.image}
                                         sx={{
                                             height: "3em",
                                             width: "3em"
