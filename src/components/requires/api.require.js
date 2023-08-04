@@ -20,6 +20,18 @@ export const LOGIN_USER = gql `
   }
 `
 
+export const VALIDATE_PASSWORD = gql `
+  query ChangePassword($filters: UserFilterInput!) {
+    changePassword(filters: $filters) {
+      id
+      nome
+      senha
+      avatar
+      email
+    }
+  }
+`
+
 export const UPDATE_TOKEN = gql `
   query UpdateLogin($filters: UserFilterInput!) {
     updateLogin(filters: $filters) {

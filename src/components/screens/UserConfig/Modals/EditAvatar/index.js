@@ -88,25 +88,27 @@ const EditAvatar = (props) => {
 
         setTimeout(async () => {
             await UpdateToken()
-        }, 2000)
-
-        toast.success('Seu avatar será trocado em breve, continue navegando!')
+        }, 1000)
+        
+        toast.success('Seu avatar será trocado em breve, Aguarde!')
         
         handleClose();
     }
 
     const UpdateToken = async() => {
-        const data = await loginUser({
+        await loginUser({
             variables: {
                 filters: {
                 id: decodedToken.id,
                 }
             }
+        }).then((data) => {
+            const NewToken = data?.data?.updateLogin?.token
+            localStorage.setItem('token', NewToken);
         })
 
-        const NewToken = data?.data?.updateLogin?.token
-
-        localStorage.setItem('token', NewToken);
+        const novaURL = 'http://localhost:3000/userConfig'
+        window.location.href = novaURL;
     }
     
     return(

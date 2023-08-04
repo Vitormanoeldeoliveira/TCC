@@ -1,22 +1,21 @@
 import { Button, DialogContent, Grid, Typography } from "@mui/material"
-import Textfield from "../../../ourComponents/TextField"
-import { BootstrapDialog, BootstrapDialogTitle } from "../../../ourComponents/Modals"
+import Textfield from "../../../../../ourComponents/TextField"
 
-import { REAL_EMAIL } from "../../../requires/api.require"
-import { ADD_USER } from "../../../requires/api.require";
-import { UPDATE_EMAIL } from "../../../requires/api.require";
-import { useLazyQuery, useMutation } from "@apollo/client"
+import { BootstrapDialog, BootstrapDialogTitle } from "../../../../../ourComponents/Modals";
 
-import { React, useEffect, useState } from "react"
 import { Formik, Form } from "formik"
 
-import flower from '../../../../Images/Avatar/flower.png'
 import { toast, Toaster } from "react-hot-toast";
+import { useState } from "react";
 
-export const ValidateEmail = (props) => {
-  const [emailValidation, {loading, error}] = useLazyQuery(REAL_EMAIL);
-  const [addUser, { loadingUser, errorUser }] = useMutation(ADD_USER);
-  const [updateEmail, {loadingEmail, errorEmail }] = useMutation(UPDATE_EMAIL)
+import { VALIDATE_PASSWORD } from "../../../../../requires/api.require";
+import { useLazyQuery } from "@apollo/client";
+import { autoDecodeToken } from "../../../../Login/token/decodeToken";
+
+export const ValidatePassword = (props) => {
+  const [passValidate, {loading, error}] = useLazyQuery(VALIDATE_PASSWORD)
+
+  const decodedToken = autoDecodeToken()
 
   const {
     setOpenDialog, 
@@ -34,64 +33,28 @@ export const ValidateEmail = (props) => {
   };
 
   const [formValues, setFormValues] = useState({
-    codigo: ""
+    senha: ""
   })
 
   const handleSubmit = async(values) => {
-    const valido = await emailValidation({
+    const data = await passValidate({
       variables: {
         filters: {
-          codigo: values.codigo,
-          valido: true
+          email: decodedToken.email,
+          senha: values.senha
         }
       }
-    }).then((data) => {
-      if(data.data.getByCode.id) {
-        return data.data.getByCode
-      }
-      return false
-    })
-    // console.log("O codigo está ", valido);
-
-    if(valido) {
-      const idInt = parseFloat(valido.id)
-      // console.log(idInt);
-      updateEmail({
-        variables: {
-          updateEmailValidCodeId: idInt,
-          data: {
-            valido: false
-          }
-        }
-      })
-      
-      const { nome, email, senha } = validadeValue;
-      const avatar = flower
-
-      const UserCreateInput = {
-        nome,
-        email,
-        senha,
-        avatar
-      };
-
-      try {
-        const { data } = await addUser({
-          variables: { user: UserCreateInput },
-        });
-        // toast.success("Cadastro Realizado com sucesso")
-        setModalControl(false)
-      } catch (error) {
+    }).then((data) =>{
+      if(data?.data?.changePassword?.id) {
         setValidadeValue({
           ...validadeValue,
-          campoErro: true
-        }); 
-        console.error('Erro ao adicionar usuário:', error);
+            validPass: true
+        })
+        handleClose()
+      } else {
+        toast.error("Senha incorreta")
       }
-    } else {
-      console.log("deu Erro");
-    }
-    handleClose()
+    })
   }
 
   return(
@@ -106,7 +69,7 @@ export const ValidateEmail = (props) => {
           onClose={handleClose}
         >
           <Typography>
-            Validação de Email
+            Informe a senha anterior
           </Typography>
         </BootstrapDialogTitle>
         <DialogContent>
@@ -127,8 +90,8 @@ export const ValidateEmail = (props) => {
               <Form>
                 <Grid item xs={12} sx={{m: 0, p: 0, mt:"2em"}} >
                   <Textfield 
-                    name="codigo"
-                    label="Código de verificação"
+                    name="senha"
+                    label="Senha"
                     fullWidth
                   />
                 </Grid>

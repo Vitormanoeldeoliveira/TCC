@@ -8,17 +8,29 @@ import { Form, Formik } from "formik";
 import Textfield from '../../../../ourComponents/TextField'
 import { autoDecodeToken } from "../../../Login/token/decodeToken";
 
+import { CREATEVALIDATECODE, UPDATE_USER } from "../../../../requires/api.require";
+import { useMutation } from "@apollo/client";
+
+import { Toaster, toast } from "react-hot-toast";
+
+import { ValidatePassword } from "./password/passwordPermission";
+
 export const UpdateUser = (props) => {
+  const [updateUser, {loading, error}] = useMutation(UPDATE_USER)
+  const [validateCode, {loadingCode, errorCode}] = useMutation(CREATEVALIDATECODE)
+
   const decodedToken = autoDecodeToken();
 
   const {openModal, setOpenModal} = props;
 
   const [open, setOpen] = useState(false);
 
+  const [ dialogOpen, setDialogOpen ] = useState(false)
+
   const [formValues, setFormValues] = useState({
     nome: decodedToken.nome,
     email: decodedToken.email,
-    senha: ""
+    validPass: false
   });
 
   const [boolean, setBoolean] = useState({
@@ -43,16 +55,45 @@ export const UpdateUser = (props) => {
     }, 1000);
   };
 
-  const handleSubmit = (values) => {
-    if(values.email == decodedToken.email) {
-      console.log("Atualizar");
-    } else {
-      console.log("Trocar email");
+  const handleSubmit = async(values) => {
+    nameChange(values)
+    emailChange(values)
+    // passwordChange(values)
+  };
+
+  const emailChange = async(values) => {
+    if(values.email != decodedToken.email) {
+      console.log("Não está pronto");
     }
   };
 
+  const nameChange = async(values) => {
+      try {
+        await updateUser({
+          variables: {
+              user: {
+                nome: values.nome,
+                senha: values.senha 
+              },
+              updateUserId: decodedToken.id
+          }
+        })
+  
+        toast.success("Usuário atualizado com sucesso")
+        handleClose()
+  
+        setTimeout(() => {
+          localStorage.setItem('token', "" );
+  
+          const novaURL = 'http://localhost:3000'
+          window.location.href = novaURL;
+        }, 1500)
+      } catch {
+        toast.error("Erro na atualização")
+      }
+  }
+
   const handleChangeDisabled = (ev) => {
-    console.log(ev);
     const name = ev;
 
     setBoolean({
@@ -61,12 +102,18 @@ export const UpdateUser = (props) => {
     })
   }
 
-  const ChangePass = () => {
-    setBoolean({
-      ...boolean,
-        changePassEnable: true
-    })
-  }
+  const ChangePass = async() => {
+    setDialogOpen(true)
+  };
+
+  useEffect(() => {
+    if(formValues.validPass) {
+      setBoolean({
+        ...boolean,
+          changePassEnable: true
+      })
+    }
+  },[formValues.validPass])
 
   return (
     <>
@@ -85,6 +132,15 @@ export const UpdateUser = (props) => {
             </Box>
         </BootstrapDialogTitle>
         <DialogContent>
+          <Typography
+            fontSize="0.8em"
+            sx={{
+              fontFamily: "FontePersonalizada",
+              textAlign: "center"
+            }}
+          >
+            *Necessário logar novamente no sistema
+          </Typography>
           <Formik
             initialValues={{ ...formValues }}
             // validationSchema={validation}
@@ -172,6 +228,15 @@ export const UpdateUser = (props) => {
           </Formik>
         </DialogContent>
       </BootstrapDialog>
+      <div><Toaster/></div>
+      {dialogOpen && (
+        <ValidatePassword 
+          setOpenDialog={setDialogOpen}
+          openDialog={dialogOpen}
+          validadeValue={formValues}
+          setValidadeValue={setFormValues}
+        /> 
+      )}
     </>
   )
-}
+};

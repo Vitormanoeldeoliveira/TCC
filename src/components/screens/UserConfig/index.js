@@ -22,7 +22,6 @@ export const UserConfig = () => {
     };
 
     const handleChangeData = () => {
-        console.log("oi");
         setOpenModal({
             ...openModal,
             modalUpdateUser: true
