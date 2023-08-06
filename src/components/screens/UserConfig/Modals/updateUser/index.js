@@ -12,6 +12,7 @@ import { CREATEVALIDATECODE, UPDATE_USER } from "../../../../requires/api.requir
 import { useMutation } from "@apollo/client";
 
 import { Toaster, toast } from "react-hot-toast";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { ValidatePassword } from "./password/passwordPermission";
 
@@ -37,7 +38,8 @@ export const UpdateUser = (props) => {
   const [boolean, setBoolean] = useState({
     nome: true,
     email: true,
-    changePassEnable: false
+    changePassEnable: false,
+    passwordView: false
   })
 
   useEffect(() => {
@@ -111,6 +113,13 @@ export const UpdateUser = (props) => {
 
   const ChangePass = async() => {
     setDialogOpen(true)
+  };
+
+  const handleChangeView = () => {
+    setBoolean({
+      ...boolean,
+      passwordView: boolean.passwordView ? false : true
+    })
   };
 
   useEffect(() => {
@@ -200,13 +209,32 @@ export const UpdateUser = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} >
-                  <Textfield 
-                    name="senha"
-                    label="Senha"
-                    sx={{
-                      display: boolean.changePassEnable ? "block" : "none"
-                    }}
-                  />
+                  <Textfield
+                      name="senha"
+                      size="small"
+                      fullWidth
+                      label="Senha"
+                      type={boolean.passwordView ? "text" : "password"}
+                      autoComplete="off"
+                      sx={{
+                        display: boolean.changePassEnable ? "block" : "none"
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <VisibilityIcon 
+                              onClick={() => handleChangeView()}
+                              sx={{
+                                cursor:"pointer",
+                                "&:hover": {
+                                  color: "#52a0e3", // Define a cor da borda quando o mouse está sobre o componente
+                                },
+                              }}
+                            />
+                          </InputAdornment>
+                        ),
+                      }}               
+                    />
                   <Typography
                     onClick={() => ChangePass()}
                     sx={{
