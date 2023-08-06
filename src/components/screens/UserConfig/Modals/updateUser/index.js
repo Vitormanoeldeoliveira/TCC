@@ -30,6 +30,7 @@ export const UpdateUser = (props) => {
   const [formValues, setFormValues] = useState({
     nome: decodedToken.nome,
     email: decodedToken.email,
+    senha: "",
     validPass: false
   });
 
@@ -68,13 +69,19 @@ export const UpdateUser = (props) => {
   };
 
   const nameChange = async(values) => {
+      const filter = {}
+
+      for(let field in values) {
+        if(values[field]) {
+          filter[field] = values[field]
+        }
+      }
+      
+      console.log(filter);
       try {
         await updateUser({
           variables: {
-              user: {
-                nome: values.nome,
-                senha: values.senha 
-              },
+              user: filter,
               updateUserId: decodedToken.id
           }
         })
