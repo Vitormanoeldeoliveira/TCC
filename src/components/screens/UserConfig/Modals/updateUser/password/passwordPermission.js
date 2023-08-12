@@ -1,7 +1,8 @@
-import { Button, DialogContent, Grid, Typography } from "@mui/material"
+import { Button, DialogContent, Grid, InputAdornment, Typography } from "@mui/material"
 import Textfield from "../../../../../ourComponents/TextField"
 
 import { BootstrapDialog, BootstrapDialogTitle } from "../../../../../ourComponents/Modals";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { Formik, Form } from "formik"
 
@@ -10,6 +11,7 @@ import { useState } from "react";
 
 import { VALIDATE_PASSWORD } from "../../../../../requires/api.require";
 import { useLazyQuery } from "@apollo/client";
+
 import { autoDecodeToken } from "../../../../Login/token/decodeToken";
 
 export const ValidatePassword = (props) => {
@@ -28,8 +30,15 @@ export const ValidatePassword = (props) => {
 
   const [open, setOpen] = useState(false)
 
+  const [boolean, setBoolean] = useState({
+    passwordView: false
+  })
+
   const handleClose = async () => {
-    setOpenDialog(false);
+    setOpenDialog({
+      ...openDialog,
+        senha: false
+    });
   };
 
   const [formValues, setFormValues] = useState({
@@ -55,12 +64,19 @@ export const ValidatePassword = (props) => {
         toast.error("Senha incorreta")
       }
     })
-  }
+  };
 
+  const handleChangeView = () => {
+    setBoolean({
+      ...boolean,
+      passwordView: boolean.passwordView ? false : true
+    })
+  };
+  
   return(
     <>
       <BootstrapDialog
-        open={openDialog}
+        open={openDialog.senha}
         fullWidth={true}
         maxWidth="xs"
       >
@@ -93,6 +109,23 @@ export const ValidatePassword = (props) => {
                     name="senha"
                     label="Senha"
                     fullWidth
+                    type={boolean.passwordView ? "text" : "password"}
+                    autoComplete="off"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <VisibilityIcon
+                            onClick={() => handleChangeView()}
+                            sx={{
+                              cursor:"pointer",
+                              "&:hover": {
+                                color: "#52a0e3", // Define a cor da borda quando o mouse está sobre o componente
+                              },
+                            }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sx={{m: 0, p: 0, mt:"1em"}} >

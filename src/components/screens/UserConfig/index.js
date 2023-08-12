@@ -36,9 +36,6 @@ export const UserConfig = () => {
     };
 
     return (
-        <>
-            <Navbar />
-            <Divider sx={{ backgroundColor: 'black', margin: '0', height: 3.5 }} />
             <Grid 
                 container 
                 // spacing={2}
@@ -51,14 +48,15 @@ export const UserConfig = () => {
                     m: 0,
                     p: 0,
                     // height: "100vh",
-                    // bgcolor: "lightblue"
+                    // bgcolor: "snow"
                 }}
             >
                 <Grid 
                     item 
-                    xs={6}
+                    xs={12}
                     sx={{
-                        mt: "10em"
+                        mt: "10em",
+                        textAlign: "center"
                     }}
                 >
                     <Box
@@ -95,7 +93,10 @@ export const UserConfig = () => {
                 </Grid>
                 <Grid
                     item
-                    xs={12}
+                    xs={11}
+                    sx={{
+                        textAlign: "center"
+                    }}
                 >
                     <Typography
                         fontSize="2em"
@@ -107,7 +108,7 @@ export const UserConfig = () => {
                             fontFamily: 'FontePersonalizada',
                             cursor: "pointer",
                             "&:hover": {
-                                color: "lightblue",
+                                color: "#75a79c",
                             },
                         }}
                     >
@@ -123,7 +124,8 @@ export const UserConfig = () => {
                     item
                     xs={12}
                     sx={{
-                        mt: "3em"
+                        mt: "3em",
+                        textAlign: "center"
                     }}
                 >
                     <Button
@@ -155,6 +157,5 @@ export const UserConfig = () => {
                     />
                 )}
             </Grid>
-        </>
     )
 }

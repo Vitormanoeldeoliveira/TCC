@@ -21,7 +21,15 @@ const Plantations = () => {
   return(
     <>
       <Navbar />
-      <Grid container alignItems="center" justifyContent="center" >
+      <Grid 
+        container 
+        alignItems="center" 
+        justifyContent="center" 
+        direction="row" 
+        sx={{
+          bgcolor: "lightblue"
+        }}
+      >
         {/* <Grid 
           item 
           xs={3}
@@ -60,9 +68,16 @@ const Plantations = () => {
         {
           data?.getAllPlantations?.length === 0 ?
           (
-            <>
+            <Grid 
+              item 
+              xs={4} 
+              sx={{ 
+                textAlign: "center",
+                bgcolor: "pink"
+              }} 
+            >
               teste
-            </>
+            </Grid>
           ) : 
           (
             data?.getAllPlantations?.map((plantacao) => (

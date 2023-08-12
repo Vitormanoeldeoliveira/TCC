@@ -77,9 +77,9 @@ const EditAvatar = (props) => {
         await updateUser({
             variables: {
                 user: {
-                    nome: decodedToken.nome,
+                    // nome: decodedToken.nome,
                     // senha: decodedToken.senha,
-                    email: decodedToken.email,
+                    // email: decodedToken.email,
                     avatar: image.image
                 },
                 updateUserId: decodedToken.id

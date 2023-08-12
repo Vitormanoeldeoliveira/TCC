@@ -15,6 +15,9 @@ import { Toaster, toast } from "react-hot-toast";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { ValidatePassword } from "./password/passwordPermission";
+import { ValidateEmail } from "../../../Login/dialog";
+
+import * as Yup from "yup";
 
 export const UpdateUser = (props) => {
   const [updateUser, {loading, error}] = useMutation(UPDATE_USER)
@@ -26,13 +29,18 @@ export const UpdateUser = (props) => {
 
   const [open, setOpen] = useState(false);
 
-  const [ dialogOpen, setDialogOpen ] = useState(false)
+  const [ dialogOpen, setDialogOpen ] = useState({
+    email: "",
+    senha: "",
+  })
 
   const [formValues, setFormValues] = useState({
     nome: decodedToken.nome,
     email: decodedToken.email,
     senha: "",
-    validPass: false
+    valido: false,
+    validPass: false,
+    campoErro: false
   });
 
   const [boolean, setBoolean] = useState({
@@ -41,6 +49,11 @@ export const UpdateUser = (props) => {
     changePassEnable: false,
     passwordView: false
   })
+
+  const validation = Yup.object().shape({
+    nome: Yup.string().required("Campo obrigatório"),
+    email: Yup.string().email("Preencha corretamente").required("Campo obrigatório"),
+  });
 
   useEffect(() => {
       if(openModal.modalUpdateUser) {
@@ -59,27 +72,60 @@ export const UpdateUser = (props) => {
   };
 
   const handleSubmit = async(values) => {
-    nameChange(values)
-    emailChange(values)
-    // passwordChange(values)
-  };
+    let verifyRealUpdate = false
 
-  const emailChange = async(values) => {
-    if(values.email != decodedToken.email) {
-      console.log("Não está pronto");
+    for(let field in boolean) {
+      if(field == "email" || field == "nome") {
+        if(boolean[field] == false) {
+          verifyRealUpdate = true
+        }
+      }
+    };
+
+    if(verifyRealUpdate) {
+      if(values.email != decodedToken.email) {
+        await emailChange(values)
+      } else {
+        basicUserChange(values)
+      }
+    } else {
+      toast.error("Parece que não foram feitas atualizações")
     }
   };
 
-  const nameChange = async(values) => {
+  const emailChange = async(values) => {
+    const { data } = await validateCode({
+      variables: {
+        data: {
+          email: values.email,
+          verifyCode: true
+        }
+      }
+    })
+
+    setFormValues({
+      ...formValues,
+      ...values,
+      valido: data,
+    })
+
+    setDialogOpen({
+      ...dialogOpen,
+        email: true
+    })
+  };
+
+  const basicUserChange = async(values) => {
       const filter = {}
 
       for(let field in values) {
-        if(values[field]) {
-          filter[field] = values[field]
+        if(field != "email") {
+          if(values[field]) {
+            filter[field] = values[field]
+          }
         }
       }
-      
-      console.log(filter);
+
       try {
         await updateUser({
           variables: {
@@ -112,7 +158,10 @@ export const UpdateUser = (props) => {
   }
 
   const ChangePass = async() => {
-    setDialogOpen(true)
+    setDialogOpen({
+      ...dialogOpen,
+        senha: true
+    })
   };
 
   const handleChangeView = () => {
@@ -159,7 +208,7 @@ export const UpdateUser = (props) => {
           </Typography>
           <Formik
             initialValues={{ ...formValues }}
-            // validationSchema={validation}
+            validationSchema={validation}
             onSubmit={(values) => handleSubmit(values)}
           >
             <Form>
@@ -191,6 +240,9 @@ export const UpdateUser = (props) => {
                     name="email"
                     label="Email"
                     disabled={boolean.email}
+                    error={formValues.campoErro}
+                    setError={setFormValues}
+                    helperText={formValues.campoErro ? "Email já cadastrado" : ""}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -238,8 +290,11 @@ export const UpdateUser = (props) => {
                   <Typography
                     onClick={() => ChangePass()}
                     sx={{
+                      width: "10em",
                       display: boolean.changePassEnable ? "none" : "block",
                       textAlign: "center",
+                      ml: "auto",
+                      mr: "auto",
                       cursor: "pointer",
                       fontFamily: "FontePersonalizada",
                       "&:hover": {
@@ -264,12 +319,24 @@ export const UpdateUser = (props) => {
         </DialogContent>
       </BootstrapDialog>
       <div><Toaster/></div>
-      {dialogOpen && (
+      {dialogOpen.senha && (
         <ValidatePassword 
           setOpenDialog={setDialogOpen}
           openDialog={dialogOpen}
           validadeValue={formValues}
           setValidadeValue={setFormValues}
+        /> 
+      )}
+      {dialogOpen.email && (
+        <ValidateEmail 
+          setOpenDialog={setDialogOpen}
+          openDialog={dialogOpen}
+          validadeValue={formValues}
+          setValidadeValue={setFormValues}
+          modalControl={open}
+          setModalControl={setOpenModal}
+          decodedToken={decodedToken}
+          tela="UpdateUser"
         /> 
       )}
     </>

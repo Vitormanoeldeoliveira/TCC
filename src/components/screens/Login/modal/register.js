@@ -27,7 +27,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
-import { Toaster, toast } from "react-hot-toast";
+// import { Toaster, toast } from "react-hot-toast";
 
 const RegisterScreen = (props) => {
   const [validateCode, {loading, error}] = useMutation(CREATEVALIDATECODE)
@@ -36,7 +36,9 @@ const RegisterScreen = (props) => {
 
   const [open, setOpen] = useState(false)
 
-  const [ dialogOpen, setDialogOpen ] = useState(false)
+  const [ dialogOpen, setDialogOpen ] = useState({
+    email: ""
+  })
 
   useEffect(() => {
     setOpen(true);
@@ -82,7 +84,9 @@ const RegisterScreen = (props) => {
       valido: data,
     })
     
-    setDialogOpen(true)
+    setDialogOpen({
+      email: true
+    })
   };
 
   return(
@@ -171,7 +175,7 @@ const RegisterScreen = (props) => {
           </>
         </DialogContent>
       </BootstrapDialog>
-      {dialogOpen && (
+      {dialogOpen.email && (
         <ValidateEmail 
           setOpenDialog={setDialogOpen}
           openDialog={dialogOpen}
@@ -179,6 +183,7 @@ const RegisterScreen = (props) => {
           setValidadeValue={setFormValues}
           modalControl={open}
           setModalControl={setOpenModal}
+          tela="RegisterUser"
         /> 
       )}
     </>

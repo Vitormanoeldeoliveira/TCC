@@ -2,7 +2,7 @@ import { Button, DialogContent, Grid, Typography } from "@mui/material"
 import Textfield from "../../../ourComponents/TextField"
 import { BootstrapDialog, BootstrapDialogTitle } from "../../../ourComponents/Modals"
 
-import { REAL_EMAIL } from "../../../requires/api.require"
+import { REAL_EMAIL, UPDATE_USER } from "../../../requires/api.require"
 import { ADD_USER } from "../../../requires/api.require";
 import { UPDATE_EMAIL } from "../../../requires/api.require";
 import { useLazyQuery, useMutation } from "@apollo/client"
@@ -14,9 +14,10 @@ import flower from '../../../../Images/Avatar/flower.png'
 import { toast, Toaster } from "react-hot-toast";
 
 export const ValidateEmail = (props) => {
-  const [emailValidation, {loading, error}] = useLazyQuery(REAL_EMAIL);
+  const [emailValidation, {loadingValidate, errorValidate}] = useLazyQuery(REAL_EMAIL);
   const [addUser, { loadingUser, errorUser }] = useMutation(ADD_USER);
   const [updateEmail, {loadingEmail, errorEmail }] = useMutation(UPDATE_EMAIL)
+  const [updateUser, {loading, error}] = useMutation(UPDATE_USER)
 
   const {
     setOpenDialog, 
@@ -25,12 +26,17 @@ export const ValidateEmail = (props) => {
     setValidadeValue,
     modalControl,
     setModalControl,
+    tela,
+    decodedToken
   } = props
 
   const [open, setOpen] = useState(false)
 
   const handleClose = async () => {
-    setOpenDialog(false);
+    setOpenDialog({
+      ...openDialog,
+        email: false,
+    });
   };
 
   const [formValues, setFormValues] = useState({
@@ -46,16 +52,14 @@ export const ValidateEmail = (props) => {
         }
       }
     }).then((data) => {
-      if(data.data.getByCode.id) {
+      if(data?.data?.getByCode?.id) {
         return data.data.getByCode
       }
       return false
     })
-    // console.log("O codigo está ", valido);
 
     if(valido) {
       const idInt = parseFloat(valido.id)
-      // console.log(idInt);
       updateEmail({
         variables: {
           updateEmailValidCodeId: idInt,
@@ -65,39 +69,81 @@ export const ValidateEmail = (props) => {
         }
       })
       
-      const { nome, email, senha } = validadeValue;
-      const avatar = flower
+      if(tela == 'RegisterUser') {
+        const { nome, email, senha } = validadeValue;
+        const avatar = flower
 
-      const UserCreateInput = {
-        nome,
-        email,
-        senha,
-        avatar
-      };
+        const UserCreateInput = {
+          nome,
+          email,
+          senha,
+          avatar
+        };
 
-      try {
-        const { data } = await addUser({
-          variables: { user: UserCreateInput },
-        });
-        // toast.success("Cadastro Realizado com sucesso")
-        setModalControl(false)
-      } catch (error) {
-        setValidadeValue({
-          ...validadeValue,
-          campoErro: true
-        }); 
-        console.error('Erro ao adicionar usuário:', error);
+        try {
+          const { data } = await addUser({
+            variables: { user: UserCreateInput },
+          });
+          toast.success("Usuário Cadastrado com sucesso")
+          setTimeout(() => {
+            handleClose()
+            setModalControl(false)
+          }, 500)
+        } catch (error) {
+          setValidadeValue({
+            ...validadeValue,
+            campoErro: true
+          }); 
+          console.error('Erro ao adicionar usuário:', error);
+          handleClose()
+        }
+      } else if(tela == 'UpdateUser') {
+        const filter = {}
+
+        for(let field in validadeValue) {
+          if(validadeValue[field]) {
+            if(validadeValue[field] != validadeValue.valido) {
+              filter[field] = validadeValue[field]
+            }
+          }
+        }
+        
+        try {
+          await updateUser({
+            variables: {
+                user: filter,
+                updateUserId: decodedToken.id
+            }
+          })
+    
+          toast.success("Usuário atualizado com sucesso")
+          handleClose()
+    
+          setTimeout(() => {
+            localStorage.setItem('token', "" );
+    
+            const novaURL = 'http://localhost:3000'
+            window.location.href = novaURL;
+          }, 1500)
+        } catch {
+          setValidadeValue({
+            ...validadeValue,
+            campoErro: true
+          }); 
+
+          toast.error("Falha ao atualizar usuário")
+          handleClose()
+        }
       }
     } else {
-      console.log("deu Erro");
+      toast.error("Código Invalido")
     }
-    handleClose()
   }
 
   return(
     <>
       <BootstrapDialog
-        open={openDialog}
+        open={openDialog.email}
         fullWidth={true}
         maxWidth="xs"
       >
