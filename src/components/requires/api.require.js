@@ -1,6 +1,6 @@
 import { useMutation, gql } from '@apollo/client';
 
-//users query
+//users requests
 export const GET_USERS = gql `
   query GetAllUsers ($filters: UserFilterInput!) {
     getAllUsers (filters: $filters){
@@ -93,17 +93,29 @@ export const UPDATE_USER = gql `
 }
 `
 
-//plantations query
+//plantations request
 export const GET_PLANTATIONS = gql`
   query Query($filters: PlantationFilterInput!) {
     getAllPlantations(filters: $filters) {
       id
       descricao
-      produto
       area
       tipo
       id_usuario
       id_cidade
+      id_planta
+    }
+  }
+`
+
+export const CREATE_PLANTATIONS = gql`
+  mutation CreatePlantation($plantations: PlantationCreateInput!) {
+    createPlantation(plantations: $plantations) {
+      id
+      descricao
+      area
+      tipo
+      id_usuario
       id_planta
     }
   }

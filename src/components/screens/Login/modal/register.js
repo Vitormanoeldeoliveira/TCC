@@ -165,6 +165,14 @@ const RegisterScreen = (props) => {
                     <Button
                       variant="outlined"
                       type="submit"
+                      sx={{
+                        color: "#b5cfce",
+                        borderColor: "#b5cfce",
+                        "&:hover": {
+                            color: "#889c9b",
+                            borderColor: "#889c9b"
+                        }
+                      }}
                     >
                       Registrar
                     </Button>
