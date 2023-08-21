@@ -30,7 +30,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 // import { Toaster, toast } from "react-hot-toast";
 
 const RegisterScreen = (props) => {
-  const [validateCode, {loading, error}] = useMutation(CREATEVALIDATECODE)
+  const [validateCode] = useMutation(CREATEVALIDATECODE)
 
   const {setOpenModal} = props;
 

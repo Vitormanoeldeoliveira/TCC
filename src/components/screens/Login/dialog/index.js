@@ -7,30 +7,30 @@ import { ADD_USER } from "../../../requires/api.require";
 import { UPDATE_EMAIL } from "../../../requires/api.require";
 import { useLazyQuery, useMutation } from "@apollo/client"
 
-import { React, useEffect, useState } from "react"
+import { React, useState } from "react"
 import { Formik, Form } from "formik"
 
 import flower from '../../../../Images/Avatar/flower.png'
 import { toast, Toaster } from "react-hot-toast";
 
 export const ValidateEmail = (props) => {
-  const [emailValidation, {loadingValidate, errorValidate}] = useLazyQuery(REAL_EMAIL);
-  const [addUser, { loadingUser, errorUser }] = useMutation(ADD_USER);
-  const [updateEmail, {loadingEmail, errorEmail }] = useMutation(UPDATE_EMAIL)
-  const [updateUser, {loading, error}] = useMutation(UPDATE_USER)
+  const [emailValidation] = useLazyQuery(REAL_EMAIL);
+  const [addUser] = useMutation(ADD_USER);
+  const [updateEmail] = useMutation(UPDATE_EMAIL)
+  const [updateUser] = useMutation(UPDATE_USER)
 
   const {
     setOpenDialog, 
     openDialog, 
     validadeValue, 
     setValidadeValue,
-    modalControl,
+    // modalControl,
     setModalControl,
     tela,
     decodedToken
   } = props
 
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
 
   const handleClose = async () => {
     setOpenDialog({
@@ -69,7 +69,7 @@ export const ValidateEmail = (props) => {
         }
       })
       
-      if(tela == 'RegisterUser') {
+      if(tela === 'RegisterUser') {
         const { nome, email, senha } = validadeValue;
         const avatar = flower
 
@@ -97,12 +97,12 @@ export const ValidateEmail = (props) => {
           console.error('Erro ao adicionar usuário:', error);
           handleClose()
         }
-      } else if(tela == 'UpdateUser') {
+      } else if(tela === 'UpdateUser') {
         const filter = {}
 
         for(let field in validadeValue) {
           if(validadeValue[field]) {
-            if(validadeValue[field] != validadeValue.valido) {
+            if(validadeValue[field] !== validadeValue.valido) {
               filter[field] = validadeValue[field]
             }
           }

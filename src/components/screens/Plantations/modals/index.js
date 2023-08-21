@@ -7,26 +7,35 @@ import Textfield from "../../../ourComponents/TextField";
 
 import YardIcon from '@mui/icons-material/Yard';
 
-import { CREATE_PLANTATIONS } from "../../../requires/api.require";
+import { CREATE_PLANTATIONS, UPDATE_PLANTATIONS } from "../../../requires/api.require";
 import { useMutation } from "@apollo/client";
 import { autoDecodeToken } from "../../Login/token/decodeToken";
 import { toast, Toaster } from "react-hot-toast";
 
 export const ModalPlantations = (props) => {
-    const {openModal, setOpenModal, refetchTableData} = props;
+    const {openModal, setOpenModal, refetchTableData, isEdit} = props;
 
     const decodedToken = autoDecodeToken();
 
-    const [addPlantations, {loading, error}] = useMutation(CREATE_PLANTATIONS)
+    const [addPlantations] = useMutation(CREATE_PLANTATIONS)
+    const [updatePlantations] = useMutation(UPDATE_PLANTATIONS)
 
     const [open, setOpen] = useState(false);
 
     const [formValues, setFormValues] = useState({
         descricao: "",
-        planta: "",
         tipo: "",
         area: ""
     });
+
+    const [autoComplete, setAutoComplete] = useState(null)
+
+    useEffect(() => {
+        if(isEdit) {
+            setFormValues(isEdit)
+            setAutoComplete(isEdit.planta.nome)
+        }
+    }, [openModal.modalPlantations])
 
     const plants = ['Tomate', 'Alface']
 
@@ -48,36 +57,54 @@ export const ModalPlantations = (props) => {
 
     const handleChangeAutoComplete = (newValue) => {
         if(newValue) {
-            setFormValues({
-                ...formValues,
-                planta: newValue == "Tomate" ? 1 : 2
-            })
+            setAutoComplete(newValue)
         }
     };
 
     const handleSubmit = async(values) => {
-        try{
-            console.log(values);
+        if(!isEdit) {
+            try{
+                const plantations = {
+                    descricao: values.descricao,
+                    area: Number(values.area),
+                    id_cidade: 1,
+                    id_planta: autoComplete === "Tomate" ? 1 : 2,
+                    id_usuario: decodedToken.id,
+                    tipo: values.tipo
+                }
+    
+                await addPlantations({
+                    variables: {
+                        plantations
+                    }
+                })
+    
+                toast.success("Cadastro Realizado Com sucesso")
+                refetchTableData()
+                handleClose()
+            }catch (e){
+                console.log(e);
+            }
+        } else {
             const plantations = {
                 descricao: values.descricao,
                 area: Number(values.area),
                 id_cidade: 1,
-                id_planta: formValues.planta,
+                id_planta: autoComplete === "Tomate" ? 1 : 2,
                 id_usuario: decodedToken.id,
                 tipo: values.tipo
             }
 
-            await addPlantations({
+            await updatePlantations({
                 variables: {
-                    plantations
+                    plantations,
+                    updatePlantationId: Number(isEdit.id)
                 }
             })
 
             toast.success("Cadastro Realizado Com sucesso")
             refetchTableData()
             handleClose()
-        }catch (e){
-            console.log(e);
         }
     }
 
@@ -115,7 +142,6 @@ export const ModalPlantations = (props) => {
                                 <Grid item xs={12} >
                                     <Autocomplete
                                         options={plants}
-                                        onChange={(ev, newValue) => handleChangeAutoComplete(newValue)}
                                         renderInput={
                                             (params) => <TextField
                                                 {...params}
@@ -124,6 +150,8 @@ export const ModalPlantations = (props) => {
                                                 variant="standard"
                                             />
                                         }
+                                        value={autoComplete}
+                                        onChange={(ev, newValue) => handleChangeAutoComplete(newValue)}
                                     />
                                 </Grid>
                                 <Grid item xs={12} md={6}>

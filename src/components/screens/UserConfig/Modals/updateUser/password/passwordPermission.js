@@ -15,7 +15,7 @@ import { useLazyQuery } from "@apollo/client";
 import { autoDecodeToken } from "../../../../Login/token/decodeToken";
 
 export const ValidatePassword = (props) => {
-  const [passValidate, {loading, error}] = useLazyQuery(VALIDATE_PASSWORD)
+  const [passValidate] = useLazyQuery(VALIDATE_PASSWORD)
 
   const decodedToken = autoDecodeToken()
 
@@ -24,8 +24,8 @@ export const ValidatePassword = (props) => {
     openDialog, 
     validadeValue, 
     setValidadeValue,
-    modalControl,
-    setModalControl,
+    // modalControl,
+    // setModalControl,
   } = props
 
   const [open, setOpen] = useState(false)

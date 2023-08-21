@@ -9,29 +9,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { autoDecodeToken } from '../../screens/Login/token/decodeToken';
 
 import Engrenagem from '../../../Images/engrenagem.png'
 
-import AvatarFlower from '../../../Images/Avatar/flower.png'
 
 const pages = ['Plantações', 'Sobre', 'Documentação'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export const Navbar = () => {
   const decodedToken = autoDecodeToken();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = (ev) => {
@@ -39,28 +31,24 @@ export const Navbar = () => {
 
     console.log(value);
     
-    if(value == 'userConfig') {
+    if(value === 'userConfig') {
       const novaURL = 'http://localhost:3000/userConfig'
       window.location.href = novaURL;
-    } else if(value == 'Plantações') {
+    } else if(value === 'Plantações') {
       const novaURL = 'http://localhost:3000/plantations'
       window.location.href = novaURL;
-    } else if(value == 'Sobre'){
+    } else if(value === 'Sobre'){
       const novaURL = 'http://localhost:3000/aboutUs'
       window.location.href = novaURL;
-    } else if(value == 'Documentação') {
+    } else if(value === 'Documentação') {
       const novaURL = 'http://localhost:3000/documentation'
       window.location.href = novaURL;
-    } else if(value == 'systemConfig') {
+    } else if(value === 'systemConfig') {
       const novaURL = 'http://localhost:3000/systemConfig'
       window.location.href = novaURL;
     }
 
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -72,7 +60,6 @@ export const Navbar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <IconButton
             onClick={
               () => handleCloseNavMenu("userConfig")
@@ -84,14 +71,11 @@ export const Navbar = () => {
             variant="h6"
             noWrap
             component="a"
-            // href="/"
             sx={{
-              // mr: 2,
               ml: 1,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'FontePersonalizada',
               fontWeight: 700,
-              // letterSpacing: '.3rem',
               color: 'black',
               textDecoration: 'none',
             }}
@@ -152,7 +136,6 @@ export const Navbar = () => {
               </MenuItem>
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
@@ -177,7 +160,6 @@ export const Navbar = () => {
             sx={{ 
               flexGrow: 1, 
               display: { xs: 'none', md: 'flex' },
-              // bgcolor: "lightblue",
               justifyContent: 'center'
             }}
           >
@@ -202,7 +184,6 @@ export const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {/* <Tooltip title="Open settings"> */}
               <IconButton 
                 onClick={() => handleCloseNavMenu("userConfig")} 
                 sx={{
@@ -214,9 +195,7 @@ export const Navbar = () => {
                 }}
               >
                 <Avatar 
-                  // alt="Remy Sharp" 
                   src={decodedToken.avatar}
-                  // onClick={handleCloseNavMenu("userConfig")}
                 />
               </IconButton>
               <IconButton
@@ -232,29 +211,6 @@ export const Navbar = () => {
               >
                 <img src={Engrenagem} />
               </IconButton>
-            {/* </Tooltip> */}
-            {/* <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu> */}
           </Box>
         </Toolbar>
       </Container>

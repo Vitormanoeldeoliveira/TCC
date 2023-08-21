@@ -7,7 +7,6 @@ import {
   useMediaQuery
 } from "@mui/material";
 
-import Logo from "../../../../src/Images/logo.png";
 import { useState } from "react";
 
 import Textfield from "../../ourComponents/TextField";
@@ -20,12 +19,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useLazyQuery } from "@apollo/client";
 
 import { LOGIN_USER } from "../../requires/api.require";
-import ScreenToken from "./token";
 
 import  plantinha from "../../../Images/plantinha.png"
 
 const UserForm = () => {
-  const [loginUser, {loading, error}] = useLazyQuery(LOGIN_USER)
+  const [loginUser] = useLazyQuery(LOGIN_USER)
 
   const [formValues, setFormValues] = useState({
     id: "",
@@ -94,30 +92,9 @@ const UserForm = () => {
       justifyItems="center"
       spacing={2}
       sx={{
-        // bgcolor:"red",
         mt: {md: "5em"}
       }}
     >
-      {/* <Grid item xs={12}>
-        <Box 
-          component="img" 
-          src={Logo} 
-          sx={{
-            ml:"-1em",
-            height:"5em"
-          }}
-        />
-      </Grid> */}
-      {/* <Grid 
-        item 
-        xs={12}
-        sx={{
-          mt:"0em",
-          ml:"-1em",
-        }}
-      >
-        <Typography fontSize="1.5em" >Login</Typography>
-      </Grid> */}
       <Grid item xs={12}>
           <Formik
             initialValues={{...formValues}}

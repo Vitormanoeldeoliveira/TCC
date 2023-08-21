@@ -1,4 +1,4 @@
-import { useMutation, gql } from '@apollo/client';
+import { gql } from '@apollo/client';
 
 //users requests
 export const GET_USERS = gql `
@@ -104,6 +104,27 @@ export const GET_PLANTATIONS = gql`
       id_usuario
       id_cidade
       id_planta
+      created_at
+      planta {
+        id
+        descricao
+      }
+    }
+  }
+`
+
+export const GET_ONE_PLANTATION = gql`
+  query Query($getOnePlantationId: Float!) {
+    getOnePlantation(id: $getOnePlantationId) {
+      id
+      descricao
+      area
+      tipo
+      id_usuario
+      planta {
+        id
+        nome
+      }
     }
   }
 `
@@ -117,6 +138,21 @@ export const CREATE_PLANTATIONS = gql`
       tipo
       id_usuario
       id_planta
+    }
+  }
+`
+
+export const UPDATE_PLANTATIONS = gql`
+  mutation UpdatePlantation($updatePlantationId: Float!, $plantations: PlantationUpdateInput!) {
+    updatePlantation(id: $updatePlantationId, plantations: $plantations) {
+      id
+      descricao
+      area
+      tipo
+      id_usuario
+      id_cidade
+      id_planta
+      created_at
     }
   }
 `

@@ -1,14 +1,8 @@
 import { 
-  Box, 
-  Card, 
-  Container, 
   Grid, 
-  TextField, 
-  Typography, 
   useMediaQuery
 } from "@mui/material";
 
-import campo from '../../../Images/campo.png';
 import login from '../../../Images/login.png'
 
 import UserForm from "./userForm";

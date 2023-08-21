@@ -1,12 +1,8 @@
 import { 
     Grid, 
     DialogContent, 
-    InputAdornment, 
     IconButton, 
-    useTheme, 
-    useMediaQuery, 
     Typography,
-    Button,
     Box,
     Avatar
   } from "@mui/material";
@@ -50,8 +46,8 @@ const Avatars = [
 const EditAvatar = (props) => {
     const decodedToken = autoDecodeToken();
 
-    const [updateUser, {loading, error}] = useMutation(UPDATE_USER);
-    const [loginUser, {loadingLogin, errorLogin}] = useLazyQuery(UPDATE_TOKEN);
+    const [updateUser] = useMutation(UPDATE_USER);
+    const [loginUser] = useLazyQuery(UPDATE_TOKEN);
 
     const {openModal, setOpenModal} = props;
 
@@ -136,7 +132,7 @@ const EditAvatar = (props) => {
                         alignItems='center'
                     >
                         {Avatars.map((image) => (
-                            <Grid item xs={3} key={image.id} >
+                            <Grid item xs={1} key={image.id} >
                                 <IconButton
                                     onClick={
                                         () => handleChangeAvatar(image)

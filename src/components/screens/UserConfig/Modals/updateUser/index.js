@@ -20,8 +20,8 @@ import { ValidateEmail } from "../../../Login/dialog";
 import * as Yup from "yup";
 
 export const UpdateUser = (props) => {
-  const [updateUser, {loading, error}] = useMutation(UPDATE_USER)
-  const [validateCode, {loadingCode, errorCode}] = useMutation(CREATEVALIDATECODE)
+  const [updateUser] = useMutation(UPDATE_USER)
+  const [validateCode] = useMutation(CREATEVALIDATECODE)
 
   const decodedToken = autoDecodeToken();
 
@@ -75,15 +75,15 @@ export const UpdateUser = (props) => {
     let verifyRealUpdate = false
 
     for(let field in boolean) {
-      if(field == "email" || field == "nome") {
-        if(boolean[field] == false) {
+      if(field === "email" || field === "nome") {
+        if(boolean[field] === false) {
           verifyRealUpdate = true
         }
       }
     };
 
     if(verifyRealUpdate) {
-      if(values.email != decodedToken.email) {
+      if(values.email !== decodedToken.email) {
         await emailChange(values)
       } else {
         basicUserChange(values)
@@ -119,7 +119,7 @@ export const UpdateUser = (props) => {
       const filter = {}
 
       for(let field in values) {
-        if(field != "email") {
+        if(field !== "email") {
           if(values[field]) {
             filter[field] = values[field]
           }
