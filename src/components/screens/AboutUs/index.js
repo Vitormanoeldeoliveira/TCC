@@ -5,13 +5,13 @@ import { Avatar, Box, Grid, Typography } from "@mui/material"
 
 import breno from '../../../Images/Creators/breno.jpeg'
 import robson from "../../../Images/Creators/robson.jpeg"
-import girl1 from '../../../Images/Avatar/girl1.png'
+import heitor from "../../../Images/Creators/heitor.jpeg"
 import vitor from "../../../Images/Creators/vitor.jpeg"
 
 const Avatars = [
     {id: 1, image: breno, name: 'Breno Andreazza'},
     {id: 2, image: robson, name: 'Robson Jitukava'},
-    {id: 3, image: girl1, name: 'Heitor Strabelli'},
+    {id: 3, image: heitor, name: 'Heitor Strabelli'},
     {id: 4, image: vitor, name: 'Vitor Manoel'},
 ]
 

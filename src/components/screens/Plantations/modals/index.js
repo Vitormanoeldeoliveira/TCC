@@ -1,4 +1,4 @@
-import { Autocomplete, Button, DialogContent, Grid, TextField, Typography } from "@mui/material";
+import { Autocomplete, Button, DialogContent, Divider, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Form, Formik } from "formik";
 import { useEffect, useState } from "react";
@@ -7,10 +7,13 @@ import Textfield from "../../../ourComponents/TextField";
 
 import YardIcon from '@mui/icons-material/Yard';
 
-import { CREATE_PLANTATIONS, UPDATE_PLANTATIONS } from "../../../requires/api.require";
+import { CREATE_HARVEST, CREATE_PLANTATIONS, UPDATE_PLANTATIONS } from "../../../requires/api.require";
 import { useMutation } from "@apollo/client";
 import { autoDecodeToken } from "../../Login/token/decodeToken";
 import { toast, Toaster } from "react-hot-toast";
+
+import * as Yup from "yup";
+import moment from "moment";
 
 export const ModalPlantations = (props) => {
     const {openModal, setOpenModal, refetchTableData, isEdit} = props;
@@ -19,25 +22,38 @@ export const ModalPlantations = (props) => {
 
     const [addPlantations] = useMutation(CREATE_PLANTATIONS)
     const [updatePlantations] = useMutation(UPDATE_PLANTATIONS)
+    const [addHarvest] = useMutation(CREATE_HARVEST)
 
     const [open, setOpen] = useState(false);
 
     const [formValues, setFormValues] = useState({
         descricao: "",
         tipo: "",
-        area: ""
+        area: "",
+        estado: "",
+        cidade: ""
     });
 
-    const [autoComplete, setAutoComplete] = useState(null)
+    const [autoComplete, setAutoComplete] = useState("Tomate")
+    const [autoCompleteType, setAutoCompleteType] = useState("Safra Continua")
+
+    const validation = Yup.object().shape({
+        descricao: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
+        // planta: Yup.string().required("Campo obrigatório"),
+        // tipo: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
+        area: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido")
+      });
 
     useEffect(() => {
         if(isEdit) {
             setFormValues(isEdit)
             setAutoComplete(isEdit.planta.nome)
+            setAutoCompleteType(isEdit.tipo)
         }
     }, [openModal.modalPlantations])
 
     const plants = ['Tomate', 'Alface']
+    const type = ['Safra Continua', 'Safra Única']
 
     useEffect(() => {
         if(openModal.modalPlantations) {
@@ -61,8 +77,15 @@ export const ModalPlantations = (props) => {
         }
     };
 
+    const handleChangeAutoCompleteType = (newValue) => {
+        if(newValue) {
+            setAutoCompleteType(newValue)
+        }
+    };
+
     const handleSubmit = async(values) => {
         if(!isEdit) {
+
             try{
                 const plantations = {
                     descricao: values.descricao,
@@ -70,10 +93,10 @@ export const ModalPlantations = (props) => {
                     id_cidade: 1,
                     id_planta: autoComplete === "Tomate" ? 1 : 2,
                     id_usuario: decodedToken.id,
-                    tipo: values.tipo
+                    tipo: autoCompleteType
                 }
     
-                await addPlantations({
+                const plantacao = await addPlantations({
                     variables: {
                         plantations
                     }
@@ -92,7 +115,7 @@ export const ModalPlantations = (props) => {
                 id_cidade: 1,
                 id_planta: autoComplete === "Tomate" ? 1 : 2,
                 id_usuario: decodedToken.id,
-                tipo: values.tipo
+                tipo: autoCompleteType
             }
 
             await updatePlantations({
@@ -120,7 +143,7 @@ export const ModalPlantations = (props) => {
                         <Typography
                             fontSize="1em"
                         >
-                            Criar Plantação
+                            {!isEdit ? "Cadatro de Plantação" : "Edição de Plantação"}
                         </Typography>
                         <YardIcon sx={{ fontSize: "1.3em", ml: "0.2em" }} />
                     </Box>
@@ -128,11 +151,26 @@ export const ModalPlantations = (props) => {
                 <DialogContent>
                     <Formik
                         initialValues={{ ...formValues }}
-                        // validationSchema={validation}
+                        validationSchema={validation}
                         onSubmit={(values) => handleSubmit(values)}
                     >
                         <Form>
                             <Grid container spacing={2} sx={{ p: 2 }} >
+                                <Grid
+                                    item
+                                    xs={12}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Plantação
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
                                 <Grid item xs={12}>
                                     <Textfield
                                         name="descricao"
@@ -144,8 +182,8 @@ export const ModalPlantations = (props) => {
                                         options={plants}
                                         renderInput={
                                             (params) => <TextField
-                                                {...params}
                                                 name="planta"
+                                                {...params}
                                                 label="Planta"
                                                 variant="standard"
                                             />
@@ -154,17 +192,56 @@ export const ModalPlantations = (props) => {
                                         onChange={(ev, newValue) => handleChangeAutoComplete(newValue)}
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Textfield 
-                                        name="tipo"
-                                        label="Tipo"
+                                <Grid item xs={12} >
+                                    <Autocomplete
+                                        options={type}
+                                        renderInput={
+                                            (params) => <TextField
+                                                {...params}
+                                                name="tipo"
+                                                label="Tipo"
+                                                variant="standard"
+                                            />
+                                        }
+                                        value={autoCompleteType}
+                                        onChange={(ev, newValue) => handleChangeAutoCompleteType(newValue)}
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                <Grid item xs={12} >
                                     <Textfield 
                                         name="area"
                                         label="Área da plantação"
                                         type="number"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Cidade
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="estado"
+                                        label="UF"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="cidade"
+                                        label="Cidade"
                                     />
                                 </Grid>
                                 <Grid item xs={12} sx={{textAlign:"center"}} >

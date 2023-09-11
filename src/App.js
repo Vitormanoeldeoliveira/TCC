@@ -10,6 +10,7 @@ import { AboutUs } from "./components/screens/AboutUs";
 import { Documentation } from "./components/screens/Documentation";
 import { SystemConfig } from "./components/screens/SystemConfig";
 import { UserConfigWithBg } from "./components/screens/UserConfig/bgColor";
+import { Harvest } from "./components/screens/harvest";
 
 const client = new ApolloClient({
   uri: 'http://localhost:3090/graphql', // Substitua pela URL da sua API GraphQL
@@ -64,6 +65,13 @@ const App = () => {
               decodedToken?.id ? 
               <SystemConfig /> : <BadRequest />
             } 
+          />
+          <Route
+            path="/harvest"
+            element={
+              decodedToken?.id ?
+              <Harvest /> : <BadRequest />
+            }
           />
         </Routes>
       </ApolloProvider>

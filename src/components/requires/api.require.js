@@ -156,3 +156,210 @@ export const UPDATE_PLANTATIONS = gql`
     }
   }
 `
+
+export const DEL_PLANTATIONS = gql `
+  mutation DeletePlantation($deletePlantationId: Float!) {
+    deletePlantation(id: $deletePlantationId) {
+      id
+    }
+  }
+`
+
+//Harvast requests
+
+export const GET_ALL_HARVESTS = gql`
+  query GetAllHarvests($filters: HarvestFilterInput!) {
+    getAllHarvests(filters: $filters) {
+      id
+      descricao
+      data_safra
+      id_plantacao
+      plantacao {
+        id
+        descricao
+        area
+        tipo
+        id_usuario
+        id_cidade
+        id_planta
+        created_at
+        cidade {
+          id
+          nome
+          cep
+          id_estado
+          estado {
+            id
+            uf
+          }
+        }
+        planta {
+          id
+          descricao
+          area
+          nome
+          qtd_agua
+          qtd_calcario
+          qtd_adubo
+          qtd_insumos
+          id_usuario
+        }
+      }
+    }
+  }
+`
+
+export const GET_ONE_HARVEST = gql `
+  query GetOneHarvest($getOneHarvestId: Float!) {
+    getOneHarvest(id: $getOneHarvestId) {
+      id
+      descricao
+      data_safra
+      id_plantacao
+      plantacao {
+        id
+        descricao
+        area
+        tipo
+        id_usuario
+        id_cidade
+        id_planta
+        created_at
+        usuario {
+          id
+          nome
+          email
+          senha
+          avatar
+        }
+        cidade {
+          id
+          nome
+          cep
+          id_estado
+          estado {
+            id
+            uf
+          }
+        }
+        planta {
+          id
+          descricao
+          area
+          nome
+          qtd_agua
+          qtd_calcario
+          qtd_adubo
+          qtd_insumos
+          id_usuario
+        }
+      }
+    }
+  }
+`
+
+export const CREATE_HARVEST = gql`
+  mutation CreateHarvest($harvest: HarvestCreateInput!) {
+    createHarvest(harvest: $harvest) {
+      id
+      descricao
+      data_safra
+      id_plantacao
+    }
+  }
+`
+
+export const UPDATE_HARVEST = gql`
+  mutation UpdateHarvest($updateHarvestId: Float!, $harvest: HarvestUpdateInput!) {
+    updateHarvest(id: $updateHarvestId, harvest: $harvest) {
+      id
+      descricao
+      data_safra
+      id_plantacao
+    }
+  }
+`
+
+export const DEL_HARVEST = gql`
+  mutation DeleteHarvest($deleteHarvestId: Float!) {
+    deleteHarvest(id: $deleteHarvestId) {
+      id
+      descricao
+    }
+  }
+`
+//gastos
+export const GET_HARVEST_EXPENSE = gql `
+query GetAllHarvestExpense($filters: HarvestExpenseFilterInput!) {
+  getAllHarvestExpense(filters: $filters) {
+    id
+    preco_adubo
+    preco_insumos
+    preco_calcario
+    valor_inicial
+    id_safra
+    custoSafra {
+      id
+      descricao
+      data_safra
+      id_plantacao
+      plantacao {
+        id
+        descricao
+        area
+        tipo
+        id_usuario
+        id_cidade
+        id_planta
+        created_at
+      }
+    }
+  }
+}
+`
+
+export const CREATE_HARVEST_EXPENSE = gql `
+  mutation CreateHarvestExpense($harvestExpense: HarvestExpenseCreateInput!) {
+    createHarvestExpense(harvestExpense: $harvestExpense) {
+      id
+      preco_adubo
+      preco_insumos
+      preco_calcario
+      valor_inicial
+      id_safra
+      custoSafra {
+        id
+        descricao
+        data_safra
+        id_plantacao
+      }
+    }
+  }
+`
+
+//lucros
+export const GET_PROFIT = gql `
+  query GetAllProfit($filters: ProfitFilterInput!) {
+    getAllProfit(filters: $filters) {
+      id
+      qtd_venda
+      valor_venda
+      periodo_venda
+      id_gasto
+      id_safra
+    }
+  }
+`
+
+export const CREATE_PROFIT = gql `
+  mutation CreateProfit($profit: ProfitCreateInput!) {
+    createProfit(Profit: $profit) {
+      id
+      qtd_venda
+      valor_venda
+      periodo_venda
+      id_gasto
+      id_safra
+    }
+  }
+`
