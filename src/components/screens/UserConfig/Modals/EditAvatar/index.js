@@ -132,7 +132,13 @@ const EditAvatar = (props) => {
                         alignItems='center'
                     >
                         {Avatars.map((image) => (
-                            <Grid item xs={1} key={image.id} >
+                            <Grid 
+                                item 
+                                xs={4}
+                                sm={2}
+                                md={1}
+                                key={image.id} 
+                            >
                                 <IconButton
                                     onClick={
                                         () => handleChangeAvatar(image)

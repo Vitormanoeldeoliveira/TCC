@@ -163,14 +163,14 @@ const RegisterScreen = (props) => {
                   </Grid>
                   <Grid item xs={12} sx={{textAlign:"center"}} >
                     <Button
-                      variant="outlined"
+                      variant="contained"
                       type="submit"
                       sx={{
-                        color: "#b5cfce",
-                        borderColor: "#b5cfce",
+                        backgroundColor: "#76a79c",
+                        borderColor: "#76a79c",
                         "&:hover": {
-                            color: "#889c9b",
-                            borderColor: "#889c9b"
+                          backgroundColor: "#889c9b",
+                          borderColor: "#889c9b"
                         }
                       }}
                     >

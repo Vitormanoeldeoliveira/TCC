@@ -1,12 +1,8 @@
-import { Button, DialogContent, Grid, InputAdornment, Typography } from "@mui/material"
-import Textfield from "../ourComponents/TextField";
+import { Button, DialogContent, Grid, Typography } from "@mui/material"
 
 import { BootstrapDialog, BootstrapDialogTitle } from "../ourComponents/Modals/index";
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { Formik, Form } from "formik"
-
-import { toast, Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 export const Delete = (props) => {
@@ -47,6 +43,9 @@ export const Delete = (props) => {
                 <BootstrapDialogTitle
                     id="customized-dialog-title"
                     onClose={handleClose}
+                    sx={{
+                        backgroundColor: "black",
+                    }}
                 >
                     <Typography
                         sx={{
@@ -74,21 +73,37 @@ export const Delete = (props) => {
                                 sx={{
                                     textAlign: "center",
                                     fontSize: "1.2em",
-                                    fontWeight: "700"
+                                    // fontWeight: "700"
                                 }}
                             >
                                 Tem certeza que deseja excluir o registro?
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} sx={{m: 0, p: 0, mt:"1em"}} >
+                        <Grid item xs={6} sx={{m: 0, p: 0, mt:"1em"}} >
                             <Button
                                 onClick={() => handleSubmit()}
-                                variant="outlined"
+                                variant="contained"
                                 color="error"
                                 type="submit"
                                 fullWidth 
                             >
                                 Sim
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6} sx={{m: 0, p: 0, mt:"1em"}} >
+                            <Button
+                                onClick={() => handleClose()}
+                                variant="contained"
+                                type="submit"
+                                fullWidth 
+                                sx={{
+                                    backgroundColor: "#76a79c",
+                                    "&:hover": {
+                                        bgcolor: "#889c9b",
+                                    },
+                                }}
+                            >
+                                Não
                             </Button>
                         </Grid>
                     </Grid>

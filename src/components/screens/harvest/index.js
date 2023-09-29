@@ -56,6 +56,12 @@ export const Harvest = () => {
                     deleteHarvestId: Number(boolean.idToDelete)
                 }
             })
+
+            setBoolean(() => ({
+                ...boolean,
+                  deleteConfirmed: false,
+                  idToDelete: "",
+            }))
           } catch (e) {
             console.log(e);
           }
@@ -440,7 +446,10 @@ export const Harvest = () => {
                                                     color: "white",
                                                     cursor: "pointer",
                                                     fontFamily: "FontePersonalizada",
-                                                    textAlign: "center"
+                                                    textAlign: "center",
+                                                    "&:hover": {
+                                                        color: "#e3e3e1"
+                                                    }
                                                 }}
                                                 value="View"
                                                 onClick={() => UpdateOrView("View", safra.id)}
@@ -449,9 +458,11 @@ export const Harvest = () => {
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    color: "red",
+                                                    color: "#76a79c",
                                                     cursor: "pointer",
-                                                    fontFamily: "FontePersonalizada"
+                                                    "&:hover": {
+                                                        color: "#889c9b",
+                                                    },
                                                 }}
                                                 value="Edit"
                                                 onClick={() => UpdateOrView("GastoLucro", safra.id)}
@@ -462,7 +473,10 @@ export const Harvest = () => {
                                                 sx={{
                                                     color: "#da8f73",
                                                     cursor: "pointer",
-                                                    fontFamily: "FontePersonalizada"
+                                                    fontFamily: "FontePersonalizada",
+                                                    "&:hover": {
+                                                        color: "#c78469"
+                                                    }
                                                 }}
                                                 value="Edit"
                                                 onClick={() => UpdateOrView("Edit", safra.id)}
@@ -493,9 +507,9 @@ export const Harvest = () => {
                     openModal={boolean}
                     setOpenModal={setBoolean}
                     refetchTableData={refetchTableData}
-                    isEdit={boolean.valuesEdit}
-                    valuesExpense={boolean.valuesExpense}
-                    valuesProfit={boolean.valuesProfit}
+                    isEdit={boolean?.valuesEdit}
+                    // valuesExpense={boolean?.valuesExpense}
+                    // valuesProfit={boolean?.valuesProfit}
                     decript={decript}
                 />
             )}

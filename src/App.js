@@ -11,6 +11,7 @@ import { Documentation } from "./components/screens/Documentation";
 import { SystemConfig } from "./components/screens/SystemConfig";
 import { UserConfigWithBg } from "./components/screens/UserConfig/bgColor";
 import { Harvest } from "./components/screens/harvest";
+import BarChartComponent from "./components/screens/Dashboard";
 
 const client = new ApolloClient({
   uri: 'http://localhost:3090/graphql', // Substitua pela URL da sua API GraphQL
@@ -35,7 +36,8 @@ const App = () => {
             path="/plantations" 
             element={
               decodedToken?.id ? 
-              <Plantations /> : <BadRequest />
+              // <Plantations /> : <BadRequest />
+              <BarChartComponent /> : <BadRequest />
             } 
           />
           <Route 

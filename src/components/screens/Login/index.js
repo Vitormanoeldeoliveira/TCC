@@ -1,4 +1,5 @@
 import { 
+  Box,
   Grid, 
   useMediaQuery
 } from "@mui/material";
@@ -18,24 +19,31 @@ const Login = (props) => {
     <>
       {
         isMobile ? (
-          <>
+          <Box
+            sx={{
+              bgcolor: "#75a79c",
+              minHeight: "102vh",
+              maxHeight: "auto"
+            }}
+          >
             <Grid 
               container
               spacing={2}
               justifyContent="center"
               alignItems="center"
               sx={{
-                margin: 0,
-                padding: 0,
-                height: "105vh",
+                minHeigth: "100vh",
+                maxHeight:"auto",
                 bgcolor: "#75a79c"
               }}
             >
               <Grid
                 item
                 xs={12}
+                justifyContent="center"
+                alignItems="center"
                 sx={{
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 <img src={Logo} />
@@ -45,7 +53,7 @@ const Login = (props) => {
                 />
               </Grid>
             </Grid>
-          </>
+          </Box>
         ) : (
         <Grid
           container 
@@ -59,17 +67,17 @@ const Login = (props) => {
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
-            height:"100vh",
+            minHeigth: "100vh",
+            maxHeight:"auto",
             maxWidth: "100%"
-            // display: { xs:"none", sm:"block" }
           }}
         >
           <Grid 
             item 
             xs={12}
             sx={{
-              height: { sm: "100vh"} ,
-              // bgcolor:"#79a59c"
+              minHeight: "100vh",
+              maxHeight:"auto",
             }} 
           >
             <Grid 
@@ -78,15 +86,14 @@ const Login = (props) => {
               justifyContent="flex-end" 
               alignItems="center"
               sx={{
-                height:"100vh",
-                // bgcolor:"pink"
+                minHeight: "100vh",
+                maxHeight:"auto",
               }} 
             >
               <Grid 
                 item xs={4.5} 
                 textAlign="center" 
                 sx={{
-                  // bgcolor:"red",
                   borderRadius:"8px",
                   // height:"auto",
                   // boxShadow: "51px 32px 19px 14px rgba(0,0,0,0.1)",

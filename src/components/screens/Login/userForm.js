@@ -92,7 +92,7 @@ const UserForm = () => {
       justifyItems="center"
       spacing={2}
       sx={{
-        mt: {md: "5em"}
+        mt: { xs: "1em", md: "5em" }
       }}
     >
       <Grid item xs={12}>
@@ -107,12 +107,13 @@ const UserForm = () => {
                     item 
                     xs={12}
                     sx={{
-                      mr: "3em"
+                      mr: {xs: "1em", md: "3em"},
+                      ml: { xs: "1em", md: 0 }
                     }}
                   >
                     <Typography
                       sx={{
-                        textAlign:"left",
+                        textAlign: "left",
                         fontSize:"1.5em",
                         fontWeight: 800,
                         fontFamily: 'FontePersonalizada',
@@ -131,7 +132,7 @@ const UserForm = () => {
                       setError={setFormValues}
                       helperText={formValues.campoErro ? "Email ou senha estão incorretos" : ""}
                       sx={{
-                        // ml:"-1em"
+
                       }}
                     />
                   </Grid>
@@ -139,7 +140,8 @@ const UserForm = () => {
                     item 
                     xs={12}
                     sx={{
-                      mr: "3em"
+                      mr: {xs: "1em", md: "3em"},
+                      ml: { xs: "1em", md: 0 }
                     }}
                   >
                     <Typography

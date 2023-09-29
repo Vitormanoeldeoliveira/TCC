@@ -105,7 +105,7 @@ export const ModalHarvest = (props) => {
                         <Typography
                             fontSize="1em"
                         >
-                            Criar Safra
+                            {!isEdit ? "Criar Safra" : "Editar Safra"}
                         </Typography>
                     </Box>
                 </BootstrapDialogTitle>
@@ -138,14 +138,15 @@ export const ModalHarvest = (props) => {
                                 </Grid>
                                 <Grid item xs={12} sx={{textAlign:"center"}} >
                                     <Button
-                                        variant="outlined"
+                                        variant="cointaned"
                                         type="submit"
                                         sx={{
-                                            color: "#da8f73",
-                                            borderColor: "#da8f73",
+                                            backgroundColor: "#9abadb",
+                                            color: "white",
+                                            borderColor: "#b4cfce",
                                             "&:hover": {
-                                                color: "#e2c9c2",
-                                                borderColor: "#e2c9c2"
+                                                backgroundColor: "#9adbb5",
+                                                borderColor: "#b4cfce"
                                             }
                                         }}
                                     >

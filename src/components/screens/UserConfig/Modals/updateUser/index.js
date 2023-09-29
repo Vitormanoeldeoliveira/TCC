@@ -307,15 +307,15 @@ export const UpdateUser = (props) => {
                 </Grid>
                 <Grid item xs={12} sx={{textAlign:"center"}} >
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     type="submit"
                     sx={{
-                      color: "#b5cfce",
-                      borderColor: "#b5cfce",
-                      "&:hover": {
-                          color: "#889c9b",
+                        backgroundColor: "#76a79c",
+                        borderColor: "#76a79c",
+                        "&:hover": {
+                          backgroundColor: "#889c9b",
                           borderColor: "#889c9b"
-                      }
+                        }
                     }}
                   >
                     Salvar

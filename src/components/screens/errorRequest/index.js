@@ -17,7 +17,8 @@ export const BadRequest = () => {
     <Box
       sx={{
         bgcolor: "#d16354",
-        height: "100vh"
+        minHeight: "100vh",
+        maxHeight: "auto"
       }}
     >
       <Grid
@@ -27,7 +28,8 @@ export const BadRequest = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          height: "100vh"
+          minHeight: "100vh",
+          maxHeight: "auto"
         }}
       >
         <Grid
@@ -77,7 +79,7 @@ export const BadRequest = () => {
                   type="submit"
                   onClick={() => logout()}
                   sx={{
-                    mt: "5em",
+                    mt: "2em",
                     height:"3em",
                     width: "10em",
                     bgcolor: "white",

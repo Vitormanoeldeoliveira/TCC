@@ -297,6 +297,8 @@ query GetAllHarvestExpense($filters: HarvestExpenseFilterInput!) {
     preco_insumos
     preco_calcario
     valor_inicial
+    hora_trabalho
+    hora_trabalhada
     id_safra
     custoSafra {
       id
@@ -337,6 +339,20 @@ export const CREATE_HARVEST_EXPENSE = gql `
   }
 `
 
+export const UPDATE_HARVEST_EXPENSE = gql `
+  mutation UpdateHarvestExpense($updateHarvestExpenseId: Float!, $harvestExpense: HarvestExpenseUpdateInput!) {
+    updateHarvestExpense(id: $updateHarvestExpenseId, harvestExpense: $harvestExpense) {
+      id
+      preco_adubo
+      preco_insumos
+      preco_calcario
+      valor_inicial
+      hora_trabalho
+      hora_trabalhada
+    }
+  }
+`
+
 //lucros
 export const GET_PROFIT = gql `
   query GetAllProfit($filters: ProfitFilterInput!) {
@@ -354,6 +370,19 @@ export const GET_PROFIT = gql `
 export const CREATE_PROFIT = gql `
   mutation CreateProfit($profit: ProfitCreateInput!) {
     createProfit(Profit: $profit) {
+      id
+      qtd_venda
+      valor_venda
+      periodo_venda
+      id_gasto
+      id_safra
+    }
+  }
+`
+
+export const UPDATE_PROFIT = gql `
+  mutation UpdateProfit($updateProfitId: Float!, $profit: ProfitUpdateInput!) {
+    updateProfit(id: $updateProfitId, Profit: $profit) {
       id
       qtd_venda
       valor_venda

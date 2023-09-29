@@ -1,4 +1,3 @@
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Box, Button, DialogContent, Divider, Grid, Typography } from "@mui/material"
 import { Form, Formik } from "formik"
 import moment from "moment";
@@ -6,23 +5,16 @@ import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import { BootstrapDialog, BootstrapDialogTitle } from "../../../ourComponents/Modals"
 import Textfield from "../../../ourComponents/TextField";
-import { CREATE_HARVEST_EXPENSE, CREATE_PROFIT, GET_HARVEST_EXPENSE } from "../../../requires/api.require";
+
 
 export const ModalInfoHarvest = (props) => {
     const {
         openModal, 
-        setOpenModal, 
-        refetchTableData, 
-        isEdit, 
-        valuesExpense, 
-        valuesProfit, 
-        decript
+        setOpenModal,
+        isEdit,
     } = props;
 
     const [open, setOpen] = useState(false);
-
-    const [addHarvestExpense] = useMutation(CREATE_HARVEST_EXPENSE)
-    const [addProfit] = useMutation(CREATE_PROFIT)
 
     const [formValues, setFormValues] = useState({
         plantacao: {
@@ -44,18 +36,6 @@ export const ModalInfoHarvest = (props) => {
         plantaPlantacao: {
             plantaPorPlantacao: ""
         },
-        gasto: {
-            adubo: "",
-            insumo: "",
-            calcario: "",
-            inicial: ""
-        },
-        lucro: {
-            qtd_venda: "",
-            valor_venda: "",
-            periodo_venda: moment(new Date()).format("YYYY-MM-DD"),
-        },
-        lucroGasto: "",
         safra: {
             descricao: "",
             data_safra: moment(new Date()).format("YYYY-MM-DD")
@@ -106,34 +86,6 @@ export const ModalInfoHarvest = (props) => {
                 descricao: isEdit?.descricao,
                 data_safra: moment(isEdit?.data_safra).format("YYYY-MM-DD"),
             },
-            lucro: {
-                qtd_venda: !valuesProfit.data.getAllProfit[0] ? "" 
-                    : valuesProfit.data.getAllProfit[0].qtd_venda,
-                valor_venda: !valuesProfit.data.getAllProfit[0] ? "" 
-                    : valuesProfit.data.getAllProfit[0].valor_venda,
-                periodo_venda: !valuesProfit.data.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") 
-                    : moment(valuesProfit.data.getAllProfit[0].periodo_venda).format("YYYY-MM-DD"),
-            },
-            gasto: {
-                adubo: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_adubo,
-                insumo: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_calcario,
-                calcario: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_insumos,
-                inicial: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].valor_inicial,
-            },
-            lucroGasto:
-                ((
-                    valuesProfit.data.getAllProfit[0]?.qtd_venda * 
-                    valuesProfit.data.getAllProfit[0]?.valor_venda
-                ) - (
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_adubo +
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario +
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos +
-                    valuesExpense.data.getAllHarvestExpense[0]?.valor_inicial
-                ))
         })
     }
 
@@ -336,121 +288,17 @@ export const ModalInfoHarvest = (props) => {
                                         disabled
                                     />
                                 </Grid>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sx={{
-                                        mt: '1em'
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            color: "gray",
-                                            textAlign: "center",
-                                            fontFamily: "FontePersonalizada"
-                                        }}
-                                    >
-                                        Gastos e Lucros
-                                    </Typography>
-                                    <Divider />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="gasto.adubo"
-                                        type="number"
-                                        label="Valor investido em adubo"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="gasto.insumo"
-                                        type="number"
-                                        label="Valor investido em insumos"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="gasto.calcario"
-                                        type="number"
-                                        label="Valor investido em calcario"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="gasto.inicial"
-                                        type="number"
-                                        label="Valor inicial investido"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="lucro.qtd_venda"
-                                        type="number"
-                                        label="Quantidade vendida"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="lucro.valor_venda"
-                                        type="number"
-                                        label="Valor da venda"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="lucro.periodo_venda"
-                                        type="Date"
-                                        label="Tempo de venda"
-                                        disabled
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="lucroGasto"
-                                        label="Lucro Obtido"
-                                        disabled
-                                    />
-                                </Grid>
                                 <Grid item xs={12} sx={{textAlign:"center"}} >
                                     <Button
-                                        variant="outlined"
+                                        variant="cointaned"
                                         type="submit"
                                         sx={{
-                                            color: "#da8f73",
-                                            borderColor: "#da8f73",
+                                            backgroundColor: "#9abadb",
+                                            color: "white",
+                                            borderColor: "#b4cfce",
                                             "&:hover": {
-                                                color: "#e2c9c2",
-                                                borderColor: "#e2c9c2"
+                                                backgroundColor: "#9adbb5",
+                                                borderColor: "#b4cfce"
                                             }
                                         }}
                                     >

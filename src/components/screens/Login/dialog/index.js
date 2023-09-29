@@ -180,9 +180,17 @@ export const ValidateEmail = (props) => {
                 </Grid>
                 <Grid item xs={12} sx={{m: 0, p: 0, mt:"1em"}} >
                   <Button
-                    variant="outlined"
-                    type="submit" 
-                    fullWidth 
+                    variant="contained"
+                    type="submit"
+                    fullWidth
+                    sx={{
+                        backgroundColor: "#76a79c",
+                        borderColor: "#76a79c",
+                        "&:hover": {
+                            backgroundColor: "#889c9b",
+                            borderColor: "#889c9b"
+                        }
+                    }}
                   >
                     Enviar
                   </Button>

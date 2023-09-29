@@ -60,6 +60,12 @@ const Plantations = () => {
             deletePlantationId: Number(boolean.idToDelete)
           }
         })
+
+        setBoolean(() => ({
+          ...boolean,
+            deleteConfirmed: false,
+            idToDelete: "",
+        }))
       } catch (e) {
         console.log(e);
       }
@@ -175,13 +181,15 @@ const Plantations = () => {
             <>
               <Grid
                 item 
-                xs={4}
+                xs={0}
+                sm={4}
                 container
                 direction="row"
                 justifyContent="center"
                 alignItems="flex-end"
                 sx={{
                   textAlign:"center",
+                  display: { xs: 'none', sm: "flex" }
                 }}
               >
                 <img src={arbusto} />
@@ -192,7 +200,8 @@ const Plantations = () => {
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
-                xs={4}
+                xs={12}
+                sm={4}
                 sx={{ 
                   textAlign: "center",
                 }} 
@@ -226,9 +235,11 @@ const Plantations = () => {
               </Grid>
               <Grid
                 item 
-                xs={4}
+                xs={0}
+                sm={4}
                 sx={{
                   textAlign:"center",
+                  display: { xs: 'none', sm: "block" }
                 }}
               >
                 <img src={vaso} />
@@ -419,7 +430,7 @@ const Plantations = () => {
                       sx={{
                         display: "inline-flex",
                         mt: "0.5em",
-                        gap: "5em",
+                        gap: {xs: "2em", sm: "3em"},
                       }}
                     >
                       <Typography
