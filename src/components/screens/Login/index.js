@@ -14,7 +14,6 @@ const Login = (props) => {
 
   const isMobile = useMediaQuery('(max-width: 920px)')
 
-  console.log(isMobile);
   return(
     <>
       {

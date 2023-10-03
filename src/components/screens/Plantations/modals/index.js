@@ -31,7 +31,8 @@ export const ModalPlantations = (props) => {
         tipo: "",
         area: "",
         estado: "",
-        cidade: ""
+        cidade: "",
+        cep: ""
     });
 
     const [autoComplete, setAutoComplete] = useState("Tomate")
@@ -129,6 +130,23 @@ export const ModalPlantations = (props) => {
             refetchTableData()
             handleClose()
         }
+    }
+
+    const onBlurCep = (ev) => {
+        const cep = ev.target.value
+        if(cep.length !== 8){
+            return;
+        }
+
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then((res) => res.json())
+            .then((data) => {
+                setFormValues((formValues) => ({
+                    ...formValues,
+                        estado: data.uf ? data.uf : "",
+                        cidade: data.localidade ? data.localidade : ""
+                }))
+            })
     }
 
     return(
@@ -232,6 +250,14 @@ export const ModalPlantations = (props) => {
                                     </Typography>
                                     <Divider />
                                 </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="cep"
+                                        label="CEP"
+                                        onBlur={(ev) => onBlurCep(ev)}
+                                    />
+                                </Grid>
+                                <Grid item xs={0} md={12}></Grid>
                                 <Grid item xs={12} md={6}>
                                     <Textfield 
                                         name="estado"

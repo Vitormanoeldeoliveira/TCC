@@ -28,8 +28,6 @@ export const Navbar = () => {
 
   const handleCloseNavMenu = (ev) => {
     const value = ev
-
-    console.log(value);
     
     if(value === 'userConfig') {
       const novaURL = 'http://localhost:3000/userConfig'

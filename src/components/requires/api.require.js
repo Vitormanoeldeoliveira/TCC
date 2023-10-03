@@ -363,6 +363,28 @@ export const GET_PROFIT = gql `
       periodo_venda
       id_gasto
       id_safra
+      lucroSafra {
+        id
+        descricao
+        data_safra
+        id_plantacao
+        excluido
+        plantacao {
+          id
+          descricao
+          area
+          tipo
+        }
+      }
+      lucroGasto {
+        id
+        preco_adubo
+        preco_insumos
+        preco_calcario
+        valor_inicial
+        hora_trabalho
+        hora_trabalhada
+      }
     }
   }
 `
