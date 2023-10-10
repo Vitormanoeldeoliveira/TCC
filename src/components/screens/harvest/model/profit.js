@@ -8,6 +8,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { BootstrapDialog, BootstrapDialogTitle } from "../../../ourComponents/Modals"
 import Textfield from "../../../ourComponents/TextField";
 import { CREATE_HARVEST_EXPENSE, CREATE_PROFIT, UPDATE_HARVEST_EXPENSE, UPDATE_PROFIT } from "../../../requires/api.require";
+import { autoDecodeToken } from "../../Login/token/decodeToken";
 
 export const ModalProfit = (props) => {
     const {
@@ -18,6 +19,8 @@ export const ModalProfit = (props) => {
         valuesExpense, 
         valuesProfit,
     } = props;
+
+    const decodedToken = autoDecodeToken()
 
     const [open, setOpen] = useState(false);
 
@@ -72,17 +75,17 @@ export const ModalProfit = (props) => {
         setFormValues({
             ...formValues,
             lucro: {
-                qtd_venda: !valuesProfit.data.getAllProfit[0] ? "" 
-                    : valuesProfit.data.getAllProfit[0].qtd_venda,
-                valor_venda: !valuesProfit.data.getAllProfit[0] ? "" 
-                    : valuesProfit.data.getAllProfit[0].valor_venda,
-                periodo_venda: !valuesProfit.data.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") 
-                    : moment(valuesProfit.data.getAllProfit[0].periodo_venda).format("YYYY-MM-DD"),
-                tempo_total: !valuesProfit.data.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") :
+                qtd_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
+                    : valuesProfit.data.getAllProfit[0]?.qtd_venda,
+                valor_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
+                    : valuesProfit.data.getAllProfit[0]?.valor_venda,
+                periodo_venda: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") 
+                    : moment(valuesProfit.data?.getAllProfit[0]?.periodo_venda).format("YYYY-MM-DD"),
+                tempo_total: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") :
                 ( 
                     daysDifference
                 ),
-                lucro_dia: !valuesProfit.data.getAllProfit[0] ? "" :
+                lucro_dia: !valuesProfit.data?.getAllProfit[0] ? "" :
                 ( 
                     ((
                         valuesProfit.data.getAllProfit[0]?.qtd_venda * 
@@ -108,20 +111,20 @@ export const ModalProfit = (props) => {
                 ),
             },
             gasto: {
-                adubo: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_adubo,
-                insumo: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_calcario,
-                calcario: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].preco_insumos,
-                inicial: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0].valor_inicial,
-                hora_trabalhada: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
+                adubo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo,
+                insumo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_calcario,
+                calcario: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
+                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos,
+                inicial: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial,
+                hora_trabalhada: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
                     : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalhada,
-                hora_trabalho: !valuesExpense.data.getAllHarvestExpense[0] ? "" 
+                hora_trabalho: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
                     : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalho  
             },
-            lucroGasto: !valuesProfit.data.getAllProfit[0] ? "" :
+            lucroGasto: !valuesProfit.data?.getAllProfit[0] ? "" :
             (
                 (
                     valuesProfit.data.getAllProfit[0]?.qtd_venda * 
@@ -161,9 +164,10 @@ export const ModalProfit = (props) => {
             qtd_venda: Number(dataProfit?.qtd_venda),
             periodo_venda: dataProfit?.periodo_venda,
             id_safra: Number(isEdit?.id),
+            id_usuario: Number(decodedToken?.id)
         }
 
-        if(!valuesExpense.data.getAllHarvestExpense[0]) {
+        if(!valuesExpense.data?.getAllHarvestExpense[0]) {
             try {
                 const idExpense = await addHarvestExpense({
                     variables: { harvestExpense }

@@ -67,8 +67,8 @@ export const ModalInfoHarvest = (props) => {
                 descricao: isEdit?.plantacao?.descricao,
                 tipo: isEdit?.plantacao?.tipo,
                 data: moment(isEdit?.plantacao?.created_at).format("YYYY-MM-DD"),
-                cidade: isEdit?.plantacao?.cidade?.nome,
-                estado: isEdit?.plantacao?.cidade?.estado?.uf,
+                cidade: isEdit?.plantacao?.cidade,
+                estado: isEdit?.plantacao?.uf,
                 area: isEdit?.plantacao?.area
             },
             planta: {

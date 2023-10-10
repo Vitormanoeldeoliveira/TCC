@@ -15,7 +15,7 @@ import { autoDecodeToken } from '../../screens/Login/token/decodeToken';
 import Engrenagem from '../../../Images/engrenagem.png'
 
 
-const pages = ['Plantações', 'Sobre', 'Documentação'];
+const pages = ['Dashboard', 'Plantações', 'Sobre'];
 
 export const Navbar = () => {
   const decodedToken = autoDecodeToken();
@@ -43,6 +43,9 @@ export const Navbar = () => {
       window.location.href = novaURL;
     } else if(value === 'systemConfig') {
       const novaURL = 'http://localhost:3000/systemConfig'
+      window.location.href = novaURL;
+    } else if(value === 'Dashboard') {
+      const novaURL = 'http://localhost:3000/dashboard'
       window.location.href = novaURL;
     }
 
@@ -173,7 +176,7 @@ export const Navbar = () => {
                   fontFamily: 'FontePersonalizada',
                   fontWeight: 700,
                   fontSize: "1em",
-                  mr: "9em" 
+                  mr: "6em" 
                 }}
               >
                 {page}

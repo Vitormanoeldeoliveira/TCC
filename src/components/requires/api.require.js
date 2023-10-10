@@ -179,20 +179,11 @@ export const GET_ALL_HARVESTS = gql`
         descricao
         area
         tipo
+        cep
+        cidade
+        uf
         id_usuario
-        id_cidade
         id_planta
-        created_at
-        cidade {
-          id
-          nome
-          cep
-          id_estado
-          estado {
-            id
-            uf
-          }
-        }
         planta {
           id
           descricao
@@ -221,8 +212,10 @@ export const GET_ONE_HARVEST = gql `
         descricao
         area
         tipo
+        cidade
+        uf
+        cep
         id_usuario
-        id_cidade
         id_planta
         created_at
         usuario {
@@ -231,16 +224,6 @@ export const GET_ONE_HARVEST = gql `
           email
           senha
           avatar
-        }
-        cidade {
-          id
-          nome
-          cep
-          id_estado
-          estado {
-            id
-            uf
-          }
         }
         planta {
           id
@@ -310,8 +293,10 @@ query GetAllHarvestExpense($filters: HarvestExpenseFilterInput!) {
         descricao
         area
         tipo
+        cep
+        cidade
+        uf
         id_usuario
-        id_cidade
         id_planta
         created_at
       }
@@ -363,6 +348,7 @@ export const GET_PROFIT = gql `
       periodo_venda
       id_gasto
       id_safra
+      id_usuario
       lucroSafra {
         id
         descricao
@@ -374,6 +360,13 @@ export const GET_PROFIT = gql `
           descricao
           area
           tipo
+          cep
+          cidade
+          uf
+          id_usuario
+          id_planta
+          created_at
+          excluido
         }
       }
       lucroGasto {
@@ -384,6 +377,7 @@ export const GET_PROFIT = gql `
         valor_inicial
         hora_trabalho
         hora_trabalhada
+        id_safra
       }
     }
   }

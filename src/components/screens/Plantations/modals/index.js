@@ -42,7 +42,8 @@ export const ModalPlantations = (props) => {
         descricao: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
         // planta: Yup.string().required("Campo obrigatório"),
         // tipo: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
-        area: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido")
+        area: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
+        cep: Yup.string().required("Campo obrigatório").max(8, "Limite de caracteres atingido"),
       });
 
     useEffect(() => {
@@ -85,12 +86,16 @@ export const ModalPlantations = (props) => {
     };
 
     const handleSubmit = async(values) => {
+        console.log(values);
         if(!isEdit) {
 
             try{
                 const plantations = {
                     descricao: values.descricao,
                     area: Number(values.area),
+                    cep: Number(values.cep),
+                    cidade: values.cidade,
+                    uf: values.estado,
                     id_cidade: 1,
                     id_planta: autoComplete === "Tomate" ? 1 : 2,
                     id_usuario: decodedToken.id,
@@ -134,19 +139,13 @@ export const ModalPlantations = (props) => {
 
     const onBlurCep = (ev) => {
         const cep = ev.target.value
-        if(cep.length !== 8){
-            return;
-        }
+        // if(cep.length !== 8){
+        //     return;
+        // }
 
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-            .then((res) => res.json())
-            .then((data) => {
-                setFormValues((formValues) => ({
-                    ...formValues,
-                        estado: data.uf ? data.uf : "",
-                        cidade: data.localidade ? data.localidade : ""
-                }))
-            })
+        // fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        //     .then((res) => res.json())
+        //     .then((data) => {})
     }
 
     return(
@@ -254,6 +253,7 @@ export const ModalPlantations = (props) => {
                                     <Textfield 
                                         name="cep"
                                         label="CEP"
+                                        type="number"
                                         onBlur={(ev) => onBlurCep(ev)}
                                     />
                                 </Grid>

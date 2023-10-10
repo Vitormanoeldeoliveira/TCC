@@ -29,15 +29,21 @@ const App = () => {
             path="/" 
             element={
               !decodedToken?.id ? 
-              <Login /> : <Plantations />
+              <Login /> : <BarChartComponent />
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              decodedToken?.id ?
+              <BarChartComponent /> : <BadRequest />
             }
           />
           <Route 
             path="/plantations" 
             element={
               decodedToken?.id ? 
-              // <Plantations /> : <BadRequest />
-              <BarChartComponent /> : <BadRequest />
+              <Plantations /> : <BadRequest />
             } 
           />
           <Route 

@@ -173,7 +173,8 @@ export const Harvest = () => {
             const profit = await getProfit({
                 variables: {
                     filters: {
-                        id_safra: Number(id)
+                        id_safra: Number(id),
+                        excluido: false
                     }
                 }
             })
