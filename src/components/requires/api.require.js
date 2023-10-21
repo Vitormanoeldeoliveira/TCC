@@ -93,6 +93,19 @@ export const UPDATE_USER = gql `
 }
 `
 
+export const DELETE_USER = gql `
+  mutation DeleteUser($deleteUserId: Float!) {
+    deleteUser(id: $deleteUserId) {
+      id
+      nome
+      email
+      senha
+      avatar
+      excluido
+    }
+  }
+`
+
 //plantations request
 export const GET_PLANTATIONS = gql`
   query Query($filters: PlantationFilterInput!) {
@@ -101,8 +114,10 @@ export const GET_PLANTATIONS = gql`
       descricao
       area
       tipo
+      cidade
+      cep
+      uf
       id_usuario
-      id_cidade
       id_planta
       created_at
       planta {
@@ -120,10 +135,14 @@ export const GET_ONE_PLANTATION = gql`
       descricao
       area
       tipo
+      cidade
+      uf
+      cep
       id_usuario
       planta {
         id
         nome
+        descricao
       }
     }
   }
@@ -135,6 +154,9 @@ export const CREATE_PLANTATIONS = gql`
       id
       descricao
       area
+      cep
+      cidade
+      uf
       tipo
       id_usuario
       id_planta
@@ -150,7 +172,6 @@ export const UPDATE_PLANTATIONS = gql`
       area
       tipo
       id_usuario
-      id_cidade
       id_planta
       created_at
     }

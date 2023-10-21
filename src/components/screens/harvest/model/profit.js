@@ -46,6 +46,7 @@ export const ModalProfit = (props) => {
             lucro_dia: "",
         },
         lucroGasto: "",
+        loading: false
     })
 
     useEffect(() => {
@@ -108,15 +109,15 @@ export const ModalProfit = (props) => {
                     )) / (
                         daysDifference
                     )
-                ),
+                ).toFixed(2),
             },
             gasto: {
                 adubo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
                     : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo,
                 insumo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_calcario,
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_insumos,
                 calcario: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos,
+                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario,
                 inicial: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
                     : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial,
                 hora_trabalhada: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
@@ -146,6 +147,11 @@ export const ModalProfit = (props) => {
     }
 
     const handleSubmit = async(values) => {
+        setFormValues({
+            ...formValues,
+            loading: true
+        })
+
         const dataExpense = values.gasto
         const dataProfit = values.lucro
         
@@ -182,6 +188,10 @@ export const ModalProfit = (props) => {
                     }
                 })
             } catch (e) {
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
                 console.log(e);
             }
         } else {
@@ -206,6 +216,10 @@ export const ModalProfit = (props) => {
                     }
                 })
             } catch (e) {
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
                 console.log(e);
             }
         }
@@ -241,30 +255,30 @@ export const ModalProfit = (props) => {
                     </Box>
                 </BootstrapDialogTitle>
                 <DialogContent>
-                    <Formik
-                        initialValues={{ ...formValues }}
-                        // validationSchema={validation}
-                        onSubmit={(values) => handleSubmit(values)}
-                    >
-                        <Form>
-                            <Grid container spacing={2} sx={{ py: 2 }} >                                
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="gasto.adubo"
-                                        type="number"
-                                        label="Valor investido em adubo"
-                                    />
-                                </Grid>
+                        <Formik
+                            initialValues={{ ...formValues }}
+                            // validationSchema={validation}
+                            onSubmit={(values) => handleSubmit(values)}
+                        >
+                            <Form>
+                                <Grid container spacing={2} sx={{ py: 2 }} >                                
+                                    <Grid
+                                        item
+                                        xs={12} md={6}
+                                    >
+                                        <Textfield
+                                            name="gasto.adubo"
+                                            numeric={true}
+                                            label="Valor investido em adubo"
+                                        />
+                                    </Grid>
                                 <Grid
                                     item
                                     xs={12} md={6}
                                 >
                                     <Textfield
                                         name="gasto.insumo"
-                                        type="number"
+                                        numeric={true}
                                         label="Valor investido em insumos"
                                     />
                                 </Grid>
@@ -274,7 +288,7 @@ export const ModalProfit = (props) => {
                                 >
                                     <Textfield
                                         name="gasto.calcario"
-                                        type="number"
+                                        numeric={true}
                                         label="Valor investido em calcario"
                                     />
                                 </Grid>
@@ -284,7 +298,7 @@ export const ModalProfit = (props) => {
                                 >
                                     <Textfield
                                         name="gasto.hora_trabalho"
-                                        type="number"
+                                        numeric={true}
                                         label="Custo da hora de trabalho"
                                     />
                                 </Grid>
@@ -294,7 +308,7 @@ export const ModalProfit = (props) => {
                                 >
                                     <Textfield
                                         name="gasto.hora_trabalhada"
-                                        type="number"
+                                        numeric={true}
                                         label="Horas trabalhadas por dia"
                                     />
                                 </Grid>
@@ -304,7 +318,7 @@ export const ModalProfit = (props) => {
                                 >
                                     <Textfield
                                         name="gasto.inicial"
-                                        type="number"
+                                        numeric={true}
                                         label="Valor inicial investido"
                                     />
                                 </Grid>
@@ -324,7 +338,7 @@ export const ModalProfit = (props) => {
                                 >
                                     <Textfield
                                         name="lucro.valor_venda"
-                                        type="number"
+                                        numeric={true}
                                         label="Valor da venda"
                                     />
                                 </Grid>
@@ -376,6 +390,7 @@ export const ModalProfit = (props) => {
                                     <Button
                                         variant="cointaned"
                                         type="submit"
+                                        disabled={formValues.loading}
                                         sx={{
                                             backgroundColor: "#9abadb",
                                             color: "white",

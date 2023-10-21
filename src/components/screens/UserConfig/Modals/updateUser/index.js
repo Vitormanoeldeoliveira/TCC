@@ -40,7 +40,8 @@ export const UpdateUser = (props) => {
     senha: "",
     valido: false,
     validPass: false,
-    campoErro: false
+    campoErro: false,
+    loading: false
   });
 
   const [boolean, setBoolean] = useState({
@@ -72,6 +73,11 @@ export const UpdateUser = (props) => {
   };
 
   const handleSubmit = async(values) => {
+    setFormValues({
+      ...formValues,
+      loading: true
+    })
+
     let verifyRealUpdate = false
 
     for(let field in boolean) {
@@ -86,9 +92,13 @@ export const UpdateUser = (props) => {
       if(values.email !== decodedToken.email) {
         await emailChange(values)
       } else {
-        basicUserChange(values)
+        await basicUserChange(values)
       }
     } else {
+      setFormValues({
+        ...formValues,
+        loading: false
+      })
       toast.error("Parece que não foram feitas atualizações")
     }
   };
@@ -129,8 +139,8 @@ export const UpdateUser = (props) => {
       try {
         await updateUser({
           variables: {
-              user: filter,
-              updateUserId: decodedToken.id
+            user: filter,
+            updateUserId: decodedToken.id
           }
         })
   
@@ -144,6 +154,10 @@ export const UpdateUser = (props) => {
           window.location.href = novaURL;
         }, 1500)
       } catch {
+        setFormValues({
+          ...formValues,
+          loading: false
+        })
         toast.error("Erro na atualização")
       }
   }
@@ -309,6 +323,7 @@ export const UpdateUser = (props) => {
                   <Button
                     variant="contained"
                     type="submit"
+                    disabled={formValues.loading}
                     sx={{
                         backgroundColor: "#76a79c",
                         borderColor: "#76a79c",

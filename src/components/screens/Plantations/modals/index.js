@@ -32,29 +32,44 @@ export const ModalPlantations = (props) => {
         area: "",
         estado: "",
         cidade: "",
-        cep: ""
+        cep: "",
+        errorCep: false,
+        loading: false
     });
 
-    const [autoComplete, setAutoComplete] = useState("Tomate")
+    const [autoComplete, setAutoComplete] = useState("Milho")
     const [autoCompleteType, setAutoCompleteType] = useState("Safra Continua")
 
     const validation = Yup.object().shape({
         descricao: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
-        // planta: Yup.string().required("Campo obrigatório"),
-        // tipo: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
         area: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
-        cep: Yup.string().required("Campo obrigatório").max(8, "Limite de caracteres atingido"),
+        cep: Yup.string().required("Campo obrigatório").max(9, "Limite de caracteres atingido"),
       });
 
     useEffect(() => {
         if(isEdit) {
-            setFormValues(isEdit)
-            setAutoComplete(isEdit.planta.nome)
+            setFormValues({ 
+                ...isEdit,
+                estado: isEdit.uf,
+                cep: isEdit.cep.toString().replace(/^(\d{5})(\d{0,3})/, '$1-$2')
+            })
+
+            setAutoComplete(isEdit.planta.descricao)
             setAutoCompleteType(isEdit.tipo)
         }
     }, [openModal.modalPlantations])
 
-    const plants = ['Tomate', 'Alface']
+    const plants = [
+        'Milho', 
+        'Soja', 
+        'Feijão', 
+        'Melancia', 
+        'Café', 
+        'Alface', 
+        'Repolho', 
+        'Laranja',
+    ]
+
     const type = ['Safra Continua', 'Safra Única']
 
     useEffect(() => {
@@ -86,23 +101,37 @@ export const ModalPlantations = (props) => {
     };
 
     const handleSubmit = async(values) => {
-        console.log(values);
-        if(!isEdit) {
+        setFormValues({
+            ...formValues,
+            loading: true
+        });
 
+        if(formValues.errorCep) {
+            return
+        }
+
+        if(!isEdit) {
             try{
                 const plantations = {
                     descricao: values.descricao,
                     area: Number(values.area),
-                    cep: Number(values.cep),
-                    cidade: values.cidade,
-                    uf: values.estado,
-                    id_cidade: 1,
-                    id_planta: autoComplete === "Tomate" ? 1 : 2,
+                    cep: Number(values.cep.replace(/\D/g, '')),
+                    cidade: formValues.cidade,
+                    uf: formValues.estado,
+                    id_planta: 
+                        autoComplete === "Milho" ? 1 :
+                            autoComplete === "Soja" ? 2 :
+                                autoComplete === "Feijão" ? 3 :
+                                    autoComplete === "Melancia" ? 4 :
+                                        autoComplete === "Café" ? 5 :
+                                            autoComplete === "Alface" ? 6 :
+                                                autoComplete === "Repolho" ? 7 : 8,
+
                     id_usuario: decodedToken.id,
                     tipo: autoCompleteType
                 }
     
-                const plantacao = await addPlantations({
+                await addPlantations({
                     variables: {
                         plantations
                     }
@@ -112,24 +141,44 @@ export const ModalPlantations = (props) => {
                 refetchTableData()
                 handleClose()
             }catch (e){
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
                 console.log(e);
             }
         } else {
-            const plantations = {
-                descricao: values.descricao,
-                area: Number(values.area),
-                id_cidade: 1,
-                id_planta: autoComplete === "Tomate" ? 1 : 2,
-                id_usuario: decodedToken.id,
-                tipo: autoCompleteType
-            }
-
-            await updatePlantations({
-                variables: {
-                    plantations,
-                    updatePlantationId: Number(isEdit.id)
+            try {
+                const plantations = {
+                    descricao: values.descricao,
+                    area: Number(values.area),
+                    cep: Number(values.cep.replace(/\D/g, '')),
+                    cidade: formValues.cidade,
+                    uf: formValues.estado,
+                    id_planta: 
+                        autoComplete === "Milho" ? 1 :
+                            autoComplete === "Soja" ? 2 :
+                                autoComplete === "Feijão" ? 3 :
+                                    autoComplete === "Melancia" ? 4 :
+                                        autoComplete === "Café" ? 5 :
+                                            autoComplete === "Alface" ? 6 :
+                                                autoComplete === "Repolho" ? 7 : 8,
+                    id_usuario: decodedToken.id,
+                    tipo: autoCompleteType
                 }
-            })
+    
+                await updatePlantations({
+                    variables: {
+                        plantations,
+                        updatePlantationId: Number(isEdit.id)
+                    }
+                })
+            } catch {
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
+            }
 
             toast.success("Cadastro Realizado Com sucesso")
             refetchTableData()
@@ -137,15 +186,54 @@ export const ModalPlantations = (props) => {
         }
     }
 
-    const onBlurCep = (ev) => {
+    const onBlurCep = async(ev) => {
         const cep = ev.target.value
-        // if(cep.length !== 8){
-        //     return;
-        // }
+        
+        setFormValues({
+            ...formValues,
+            loading: true
+        });
 
-        // fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        //     .then((res) => res.json())
-        //     .then((data) => {})
+        if(cep.length !== 9){
+            setFormValues((formValues) =>  ({
+                ...formValues,
+                cidade: "",
+                estado: "",
+                errorCep: true,
+                loading: false
+            }));
+            return;
+        }
+
+        try {
+            await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if(data.localidade) {
+                        setFormValues({
+                            ...formValues,
+                            cidade: data.localidade,
+                            estado: data.uf,
+                            loading: false
+                        })
+                    } else {
+                        setFormValues({
+                            ...formValues,
+                            cidade: "",
+                            estado: "",
+                            errorCep: true,
+                            loading: false
+                        })
+                        // toast.error("Não identificamos o cep informado, tente novamente")
+                    }
+                })
+        } catch {
+            setFormValues({
+                ...formValues,
+                cidade: "",
+                estado: "",
+            })
+        }
     }
 
     return(
@@ -173,6 +261,52 @@ export const ModalPlantations = (props) => {
                     >
                         <Form>
                             <Grid container spacing={2} sx={{ p: 2 }} >
+                            <Grid
+                                    item
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Cidade
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="cep"
+                                        label="CEP"
+                                        cepFormat={true}
+                                        onKeyUp={(ev) => onBlurCep(ev)}
+                                        error={formValues.errorCep}
+                                        setError={setFormValues}
+                                        helperText={formValues.errorCep ? "Cep Inválido" : ""}
+                                    />
+                                </Grid>
+                                <Grid item xs={0} md={12}></Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="estado"
+                                        label="UF"
+                                        value={formValues.estado}
+                                        disabled
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <Textfield 
+                                        name="cidade"
+                                        label="Cidade"
+                                        value={formValues.cidade}
+                                        disabled
+                                    />
+                                </Grid>
                                 <Grid
                                     item
                                     xs={12}
@@ -228,52 +362,14 @@ export const ModalPlantations = (props) => {
                                     <Textfield 
                                         name="area"
                                         label="Área da plantação"
-                                        type="number"
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sx={{
-                                        mt: '1em'
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            color: "gray",
-                                            textAlign: "center",
-                                            fontFamily: "FontePersonalizada"
-                                        }}
-                                    >
-                                        Cidade
-                                    </Typography>
-                                    <Divider />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Textfield 
-                                        name="cep"
-                                        label="CEP"
-                                        type="number"
-                                        onBlur={(ev) => onBlurCep(ev)}
-                                    />
-                                </Grid>
-                                <Grid item xs={0} md={12}></Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Textfield 
-                                        name="estado"
-                                        label="UF"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <Textfield 
-                                        name="cidade"
-                                        label="Cidade"
+                                        numeric={true}
                                     />
                                 </Grid>
                                 <Grid item xs={12} sx={{textAlign:"center"}} >
                                     <Button
                                         variant="contained"
                                         type="submit"
+                                        disabled={formValues.loading}
                                         sx={{
                                             backgroundColor: "#76a79c",
                                             borderColor: "#76a79c",

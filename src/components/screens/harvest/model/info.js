@@ -72,15 +72,18 @@ export const ModalInfoHarvest = (props) => {
                 area: isEdit?.plantacao?.area
             },
             planta: {
-                descricao: isEdit?.plantacao?.planta?.nome,
+                descricao: isEdit?.plantacao?.planta?.descricao,
                 area: isEdit?.plantacao?.planta?.area,
                 adubo: isEdit?.plantacao?.planta?.qtd_adubo,
                 agua: isEdit?.plantacao?.planta?.qtd_agua,
                 calcario: isEdit?.plantacao?.planta?.qtd_calcario,
-                insumos: isEdit?.plantacao?.planta?.qtd_insumos
+                insumos: isEdit?.plantacao?.planta?.qtd_insumos.toFixed(2)
             },
             plantaPlantacao: {
-                plantaPorPlantacao: (isEdit?.plantacao?.area / isEdit?.plantacao?.planta?.area)
+                plantaPorPlantacao: (
+                    (isEdit?.plantacao?.area * 10000) / 
+                        isEdit?.plantacao?.planta?.area
+                    ).toFixed(2)
             },
             safra: {
                 descricao: isEdit?.descricao,
@@ -176,7 +179,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="plantacao.area"
-                                        label="Área da plantação"
+                                        label="Área da plantação (ha)"
                                         disabled
                                     />
                                 </Grid>
@@ -244,7 +247,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.area"
-                                        label="Espaçamento da planta"
+                                        label="Espaçamento da planta (m)"
                                         disabled
                                     />
                                 </Grid>
@@ -254,7 +257,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.adubo"
-                                        label="Adubo necessário"
+                                        label="Adubo necessário (kg)"
                                         disabled
                                     />
                                 </Grid>
@@ -264,7 +267,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.agua"
-                                        label="Agua necessária"
+                                        label="Agua necessária (l/ha)"
                                         disabled
                                     />
                                 </Grid>
@@ -274,7 +277,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.calcario"
-                                        label="Calcário necessário"
+                                        label="Calcário necessário (kg)"
                                         disabled
                                     />
                                 </Grid>
@@ -284,7 +287,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.insumos"
-                                        label="Insumos necessários"
+                                        label="Defensores necessários"
                                         disabled
                                     />
                                 </Grid>

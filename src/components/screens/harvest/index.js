@@ -14,6 +14,7 @@ import { ModalProfit } from "./model/profit";
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Delete } from "../../deleteConfirm";
+import { toast, Toaster } from "react-hot-toast";
 
 export const Harvest = () => {
     //Criptografia do id_plantação
@@ -62,6 +63,8 @@ export const Harvest = () => {
                   deleteConfirmed: false,
                   idToDelete: "",
             }))
+
+            toast.success("Safra deletada com sucesso")
           } catch (e) {
             console.log(e);
           }
@@ -392,15 +395,15 @@ export const Harvest = () => {
                                         >
                                             <Typography
                                                 sx={{
-                                                fontSize: "1.4em",
-                                                fontFamily: "FontePersonalizada"
+                                                    fontSize: "1.4em",
+                                                    fontFamily: "FontePersonalizada",
                                                 }}
                                             >
                                                 {safra.descricao}
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: "1em",
+                                                    fontSize: "1.1em",
                                                     fontFamily: "FontePersonalizada"
                                                 }}
                                             >
@@ -408,22 +411,19 @@ export const Harvest = () => {
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: "0.9em",
-                                                    mt: "0.8em",
-                                                    fontFamily: "FontePersonalizada",
-                                                    color: valueLucroGasto.lucro > 0 ? "green" : "red"
+                                                    fontSize: "1em",
+                                                    fontFamily: "FontePersonalizada"
                                                 }}
                                             >
-                                                Lucro: {valueLucroGasto.lucro ? valueLucroGasto.lucro : "-"}
+                                                Planta: {safra.plantacao.planta.descricao}
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: "0.7em",
+                                                    fontSize: "1em",
                                                     fontFamily: "FontePersonalizada",
-                                                    color: "red"
                                                 }}
                                             >
-                                                Gasto: {valueLucroGasto.gasto ? valueLucroGasto.gasto : "-"}
+                                                Cidade: {safra.plantacao.cidade}
                                             </Typography>
                                         </Box>
                                     </Box>
@@ -527,12 +527,14 @@ export const Harvest = () => {
                 />
             )}
 
-        {boolean.modalDelete && (
-            <Delete
-                openDialog={boolean}
-                setOpenDialog={setBoolean}
-            />
-        )}
+            {boolean.modalDelete && (
+                <Delete
+                    openDialog={boolean}
+                    setOpenDialog={setBoolean}
+                />
+            )}
+
+            <div><Toaster/></div>
         </>
     )
 }

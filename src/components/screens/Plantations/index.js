@@ -9,7 +9,7 @@ import { Navbar } from "../../ourComponents/Navbar";
 import add from "../../../Images/plantacoes/add.png"
 import vaso from "../../../Images/plantacoes/vasos.png"
 import arbusto from "../../../Images/plantacoes/arbusto.png"
-import { Toaster } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { ModalPlantations } from "./modals";
 import moment from 'moment'
@@ -66,6 +66,8 @@ const Plantations = () => {
             deleteConfirmed: false,
             idToDelete: "",
         }))
+
+        toast.success("Plantação deletada com sucesso")
       } catch (e) {
         console.log(e);
       }
@@ -99,7 +101,7 @@ const Plantations = () => {
             getOnePlantationId: Number(id)
         }
       })
-
+      
       setBoolean({
         ...boolean,
         modalPlantations: true,

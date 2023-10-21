@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 import PropTypes from "prop-types";
 
-const Textfield = ({ name, setError, ...otherProps }) => {
+const Textfield = ({ name, setError, cepFormat, numeric, ...otherProps }) => {
 
    const { setFieldValue } = useFormikContext();
    const [field, meta] = useField(name);
@@ -15,7 +15,17 @@ const Textfield = ({ name, setError, ...otherProps }) => {
          })
       }
 
-      const data = event.target.value;
+      let data = event.target.value;
+
+      if(cepFormat && data.length == 8) {
+         data = data.replace(/\D/g, '');
+         data = data.replace(/^(\d{5})(\d{0,3})/, '$1-$2');
+      }
+
+      if(numeric) {
+         data = data.replace(/[^0-9.]/g, '');
+      }
+
       return setFieldValue(name, data);
    };
     const configTextField = {

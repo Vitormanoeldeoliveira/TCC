@@ -8,6 +8,7 @@ import moment from "moment";
 import { CREATE_HARVEST, UPDATE_HARVEST } from "../../../requires/api.require";
 import { useMutation } from "@apollo/client";
 import { toast, Toaster } from "react-hot-toast";
+import { FormatColorReset } from "@mui/icons-material";
 
 export const ModalHarvest = (props) => {
     const {openModal, setOpenModal, refetchTableData, isEdit, decript} = props;
@@ -20,6 +21,7 @@ export const ModalHarvest = (props) => {
     const [formValues, setFormValues] = useState({
         descricao: "",
         data_safra: moment(new Date()).format("YYYY-MM-DD"),
+        loading: false
     })
 
     const validation = Yup.object().shape({
@@ -50,6 +52,10 @@ export const ModalHarvest = (props) => {
     };
 
     const handleSubmit = async(values) => {
+        setFormValues({
+            ...formValues,
+            loading: true
+        })
         if(!isEdit) {
             try {
                 await addHarvest({
@@ -66,19 +72,31 @@ export const ModalHarvest = (props) => {
                 refetchTableData()
                 handleClose()
             } catch (e){
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
                 console.log(e);
             }
         } else {
-            await updateHarvest({
-                variables: {
-                    updateHarvestId: Number(isEdit.id),
-                    harvest: {
-                        descricao: values.descricao,
-                        data_safra: values.data_safra,
-                        id_plantacao: Number(decript)
+            try {
+                await updateHarvest({
+                    variables: {
+                        updateHarvestId: Number(isEdit.id),
+                        harvest: {
+                            descricao: values.descricao,
+                            data_safra: values.data_safra,
+                            id_plantacao: Number(decript)
+                        }
                     }
-                }
-            })
+                })
+            } catch (e) {
+                setFormValues({
+                    ...formValues,
+                    loading: false
+                })
+                console.log(e)
+            }
 
             toast.success("Cadastro Realizado Com sucesso")
             refetchTableData()
@@ -139,6 +157,7 @@ export const ModalHarvest = (props) => {
                                 <Grid item xs={12} sx={{textAlign:"center"}} >
                                     <Button
                                         variant="cointaned"
+                                        disabled={formValues.loading}
                                         type="submit"
                                         sx={{
                                             backgroundColor: "#9abadb",
