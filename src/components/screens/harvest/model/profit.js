@@ -79,7 +79,7 @@ export const ModalProfit = (props) => {
                 qtd_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
                     : valuesProfit.data.getAllProfit[0]?.qtd_venda,
                 valor_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
-                    : valuesProfit.data.getAllProfit[0]?.valor_venda,
+                    : valuesProfit.data.getAllProfit[0]?.valor_venda.toFixed(2).toString().replace('.', ','),
                 periodo_venda: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") 
                     : moment(valuesProfit.data?.getAllProfit[0]?.periodo_venda).format("YYYY-MM-DD"),
                 tempo_total: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") :
@@ -109,21 +109,21 @@ export const ModalProfit = (props) => {
                     )) / (
                         daysDifference
                     )
-                ).toFixed(2),
+                ).toFixed(2).toString().replace('.', ','),
             },
             gasto: {
                 adubo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo,
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo.toFixed(2).toString().replace('.', ','),
                 insumo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_insumos,
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_insumos.toFixed(2).toString().replace('.', ','),
                 calcario: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario,
+                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario.toFixed(2).toString().replace('.', ','),
                 inicial: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial,
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial.toFixed(2).toString().replace('.', ','),
                 hora_trabalhada: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalhada,
+                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalhada.toFixed(2).toString().replace('.', ','),
                 hora_trabalho: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalho  
+                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalho.toFixed(2).toString().replace('.', ',') 
             },
             lucroGasto: !valuesProfit.data?.getAllProfit[0] ? "" :
             (
@@ -142,7 +142,7 @@ export const ModalProfit = (props) => {
                         daysDifference
                     )
                 )
-            )
+            ).toFixed(2).toString().replace('.', ',')
         })
     }
 
@@ -157,16 +157,16 @@ export const ModalProfit = (props) => {
         
         const harvestExpense = {
             id_safra: Number(isEdit?.id),
-            preco_adubo: Number(dataExpense?.adubo),
-            preco_calcario: Number(dataExpense?.calcario),
-            preco_insumos: Number(dataExpense?.insumo),
-            valor_inicial: Number(dataExpense?.inicial),
-            hora_trabalho: Number(dataExpense?.hora_trabalho),
-            hora_trabalhada: Number(dataExpense?.hora_trabalhada)
+            preco_adubo: Number(dataExpense?.adubo.replace(',', '.')),
+            preco_calcario: Number(dataExpense?.calcario.replace(',', '.')),
+            preco_insumos: Number(dataExpense?.insumo.replace(',', '.')),
+            valor_inicial: Number(dataExpense?.inicial.replace(',', '.')),
+            hora_trabalho: Number(dataExpense?.hora_trabalho.replace(',', '.')),
+            hora_trabalhada: Number(dataExpense?.hora_trabalhada.replace(',', '.'))
         }
 
         const profit = {
-            valor_venda: Number(dataProfit?.valor_venda),
+            valor_venda: Number(dataProfit?.valor_venda.replace(',', '.')),
             qtd_venda: Number(dataProfit?.qtd_venda),
             periodo_venda: dataProfit?.periodo_venda,
             id_safra: Number(isEdit?.id),

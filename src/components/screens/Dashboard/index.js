@@ -43,33 +43,32 @@ const BarChartComponent = () => {
                 datasets: [{
                     label: "Lucro Geral",
                     data: data?.getAllProfit.map((data) =>
-                        {
-                            const parsedDate1 = parseISO(data.periodo_venda);
-                            const parsedDate2 = parseISO(data.lucroSafra.data_safra);
-                            const daysDifference = Math.abs(differenceInDays(parsedDate2, parsedDate1))
-                            
-                            const count = (
+                    {
+                        const parsedDate1 = parseISO(data.periodo_venda);
+                        const parsedDate2 = parseISO(data.lucroSafra.data_safra);
+                        const daysDifference = Math.abs(differenceInDays(parsedDate2, parsedDate1))
+                        
+                        let count = (
+                            (
                                 (
+                                    data?.qtd_venda * 
+                                    data?.valor_venda
+                                ) - (
+                                    data.lucroGasto?.preco_adubo +
+                                    data.lucroGasto?.preco_calcario +
+                                    data.lucroGasto?.preco_insumos +
+                                    data.lucroGasto?.valor_inicial +
                                     (
-                                        data?.qtd_venda * 
-                                        data?.valor_venda
-                                    ) - (
-                                        data.lucroGasto?.preco_adubo +
-                                        data.lucroGasto?.preco_calcario +
-                                        data.lucroGasto?.preco_insumos +
-                                        data.lucroGasto?.valor_inicial +
-                                        (
-                                            data.lucroGasto?.hora_trabalho *
-                                            data.lucroGasto?.hora_trabalhada
-                                        ) * (
-                                            daysDifference
-                                        )
+                                        data.lucroGasto?.hora_trabalho *
+                                        data.lucroGasto?.hora_trabalhada
+                                    ) * (
+                                        daysDifference
                                     )
                                 )
                             )
-                            return count
-                        }
-                    ),
+                        )
+                        return count
+                    }),
                     borderColor: "black",
                     backgroundColor: ["#5b8675", "#da9075", "black"]
                 }],

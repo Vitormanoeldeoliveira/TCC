@@ -3,7 +3,7 @@ import { TextField } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 import PropTypes from "prop-types";
 
-const Textfield = ({ name, setError, cepFormat, numeric, ...otherProps }) => {
+const Textfield = ({ name, setError, cepFormat, numeric, contained, multiline, resetForm, ...otherProps }) => {
 
    const { setFieldValue } = useFormikContext();
    const [field, meta] = useField(name);
@@ -24,6 +24,10 @@ const Textfield = ({ name, setError, cepFormat, numeric, ...otherProps }) => {
 
       if(numeric) {
          data = data.replace(/[^0-9.]/g, '');
+
+         if (data.length > 2) {
+            data = data.slice(0, -2) + ',' + data.slice(-2);
+         }
       }
 
       return setFieldValue(name, data);
@@ -32,7 +36,9 @@ const Textfield = ({ name, setError, cepFormat, numeric, ...otherProps }) => {
         ...field,
         ...otherProps,
         fullWidth: true,
-        variant: "standard",
+        variant: contained ? !multiline ? "outlined" : "filled" : "standard",
+         multiline: multiline ? true : false,
+         rows: multiline && 6,
         onChange: handleChange,
     };
 
@@ -41,7 +47,23 @@ const Textfield = ({ name, setError, cepFormat, numeric, ...otherProps }) => {
       configTextField.helperText = meta.error;
    }
 
-   return <TextField size="small" autoComplete="off" {...configTextField} />;
+   return <TextField 
+      size="small" 
+      autoComplete="off"
+      {...configTextField}
+      sx={{
+         bgcolor: contained ? "#3b3a38" : "default",
+         '& .MuiInputBase-input': {
+            color: contained && 'snow',
+         },
+         '& label': {
+            color: contained && 'snow',
+         },
+         '& label.Mui-focused': {
+            color: contained && 'snow',
+         },
+      }}
+   />;
 };
 
 Textfield.propTypes = {

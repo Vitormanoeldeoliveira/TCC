@@ -2,11 +2,12 @@ import { Divider, Grid, Typography } from "@mui/material"
 import { useState } from "react"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteUserScreen from "./subScreens/delete"
+import HelpUserScreen from "./subScreens/help";
 
 export const SystemConfig = () => {
     const [selected, setSelected] = useState({
-        help: false,
-        deleted: true,
+        help: true,
+        deleted: false,
         acess: false
     })
 
@@ -81,26 +82,10 @@ export const SystemConfig = () => {
                     }}
                 />
                 <Typography
-                    onClick={() => handlePage("access")}
-                    sx={{
-                        ml: "2.5em",
-                        mt: "1em",
-                        mr: "2em",
-                        fontSize: "1.2em",
-                        borderRadius: "1em",
-                        pl: "0.5em",
-                        textAlign: "left",
-                        fontFamily: 'FontePersonalizada',
-                        cursor: "pointer",
-                        bgcolor: selected.acess ? "white" : "default"
-                    }}
-                >
-                    Acessibilidade
-                </Typography>
-                <Typography
                     onClick={() => handlePage("help")}
                     sx={{
                         ml: "2.5em",
+                        mt: "1em",
                         mr: "2em",
                         fontSize: "1.2em",
                         borderRadius: "1em",
@@ -134,7 +119,7 @@ export const SystemConfig = () => {
                 {
                     selected.acess && (
                         <>
-                            oi
+                            Tela inexistente
                         </>
                     )
                 }
@@ -148,7 +133,7 @@ export const SystemConfig = () => {
                 {
                     selected.help && (
                         <>
-                            bolo
+                            <HelpUserScreen />
                         </>
                     )
                 }

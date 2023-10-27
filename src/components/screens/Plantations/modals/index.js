@@ -44,12 +44,13 @@ export const ModalPlantations = (props) => {
         descricao: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
         area: Yup.string().required("Campo obrigatório").max(30, "Limite de caracteres atingido"),
         cep: Yup.string().required("Campo obrigatório").max(9, "Limite de caracteres atingido"),
-      });
+    });
 
     useEffect(() => {
         if(isEdit) {
             setFormValues({ 
                 ...isEdit,
+                area: isEdit.area.toFixed(2).toString().replace('.', ','),
                 estado: isEdit.uf,
                 cep: isEdit.cep.toString().replace(/^(\d{5})(\d{0,3})/, '$1-$2')
             })
@@ -114,8 +115,8 @@ export const ModalPlantations = (props) => {
             try{
                 const plantations = {
                     descricao: values.descricao,
-                    area: Number(values.area),
-                    cep: Number(values.cep.replace(/\D/g, '')),
+                    area: Number(values.area.replace(',', '.')),
+                    cep: values.cep.replace(/\D/g, ''),
                     cidade: formValues.cidade,
                     uf: formValues.estado,
                     id_planta: 
@@ -151,8 +152,8 @@ export const ModalPlantations = (props) => {
             try {
                 const plantations = {
                     descricao: values.descricao,
-                    area: Number(values.area),
-                    cep: Number(values.cep.replace(/\D/g, '')),
+                    area: Number(values.area.replace(',', '.')),
+                    cep: values.cep.replace(/\D/g, ''),
                     cidade: formValues.cidade,
                     uf: formValues.estado,
                     id_planta: 
@@ -361,7 +362,7 @@ export const ModalPlantations = (props) => {
                                 <Grid item xs={12} >
                                     <Textfield 
                                         name="area"
-                                        label="Área da plantação"
+                                        label="Área da plantação (ha)"
                                         numeric={true}
                                     />
                                 </Grid>

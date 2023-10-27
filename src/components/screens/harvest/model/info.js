@@ -69,21 +69,21 @@ export const ModalInfoHarvest = (props) => {
                 data: moment(isEdit?.plantacao?.created_at).format("YYYY-MM-DD"),
                 cidade: isEdit?.plantacao?.cidade,
                 estado: isEdit?.plantacao?.uf,
-                area: isEdit?.plantacao?.area
+                area: isEdit?.plantacao?.area.toFixed(2).toString().replace('.', ',')
             },
             planta: {
                 descricao: isEdit?.plantacao?.planta?.descricao,
-                area: isEdit?.plantacao?.planta?.area,
-                adubo: isEdit?.plantacao?.planta?.qtd_adubo,
-                agua: isEdit?.plantacao?.planta?.qtd_agua,
-                calcario: isEdit?.plantacao?.planta?.qtd_calcario,
-                insumos: isEdit?.plantacao?.planta?.qtd_insumos.toFixed(2)
+                area: isEdit?.plantacao?.planta?.area.toFixed(2).toString().replace('.', ','),
+                adubo: isEdit?.plantacao?.planta?.qtd_adubo.toFixed(2).toString().replace('.', ','),
+                agua: isEdit?.plantacao?.planta?.qtd_agua.toFixed(2).toString().replace('.', ','),
+                calcario: isEdit?.plantacao?.planta?.qtd_calcario.toFixed(2).toString().replace('.', ','),
+                insumos: isEdit?.plantacao?.planta?.qtd_insumos.toFixed(2).toString().replace('.', ',')
             },
             plantaPlantacao: {
                 plantaPorPlantacao: (
                     (isEdit?.plantacao?.area * 10000) / 
                         isEdit?.plantacao?.planta?.area
-                    ).toFixed(2)
+                    ).toFixed(0)
             },
             safra: {
                 descricao: isEdit?.descricao,
@@ -287,7 +287,7 @@ export const ModalInfoHarvest = (props) => {
                                 >
                                     <Textfield
                                         name="planta.insumos"
-                                        label="Defensores necessários"
+                                        label="Defensores necessários (kg)"
                                         disabled
                                     />
                                 </Grid>

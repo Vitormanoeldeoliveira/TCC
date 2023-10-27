@@ -4,7 +4,8 @@ import {
   useMediaQuery
 } from "@mui/material";
 
-import login from '../../../Images/login.png'
+import login from '../../../Images/animation.mp4'
+// import login from '../../../Images/login.png'
 
 import UserForm from "./userForm";
 
@@ -62,7 +63,7 @@ const Login = (props) => {
           sx={{
             margin:0, 
             padding:0,
-            backgroundImage: `url(${login})`,
+            // bgcolor: "yellow",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
@@ -71,6 +72,22 @@ const Login = (props) => {
             maxWidth: "100%"
           }}
         >
+          <video
+            autoPlay
+            loop
+            muted
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: "100%",
+              objectFit: 'cover',
+              zIndex: -1
+            }}
+          >
+            <source src={login} type="video/mp4" />
+          </video>
           <Grid 
             item 
             xs={12}
@@ -98,6 +115,7 @@ const Login = (props) => {
                   // boxShadow: "51px 32px 19px 14px rgba(0,0,0,0.1)",
                 }}
               >
+                <img src={Logo} />
                 <UserForm 
                   userId={props.userId}
                   setUserId={props.setUserId}
