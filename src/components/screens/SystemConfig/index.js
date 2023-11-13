@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from "@mui/material"
+import { Box, Divider, Grid, Typography } from "@mui/material"
 import { useState } from "react"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteUserScreen from "./subScreens/delete"
@@ -54,7 +54,8 @@ export const SystemConfig = () => {
         >
             <Grid 
                 item 
-                xs={3}
+                xs={12}
+                lg={3}
                 sx={{
                     bgcolor: "#75a79c",
                     minHeight: "100%",
@@ -74,9 +75,9 @@ export const SystemConfig = () => {
                 </Typography>
                 <Divider 
                     sx={{
-                        textAlign: "right",
+                        textAlign: { xs: "center", md: "right" },
                         ml: "auto",
-                        mr: "1em",
+                        mr: { xs: "auto", lg: "1em"},
                         width: "18em",
                         fontWeight: 900
                     }}
@@ -115,7 +116,25 @@ export const SystemConfig = () => {
                     Excluir conta
                 </Typography>
             </Grid>
-            <Grid item xs={8} >
+            <Grid item xs={11.5} md={12} lg={8.5} >
+                <Box
+                    sx={{
+                        width: "100%",
+                        textAlign: "right"
+                    }}
+                >
+                    <HighlightOffIcon
+                        onClick={() => backToInit()}
+                        sx={{
+                            cursor: "pointer",
+                            fontSize: "4em",
+                            "&:hover": {
+                                color: "red",
+                                color: "red"
+                            }
+                        }}
+                    />
+                </Box>
                 {
                     selected.acess && (
                         <>
@@ -126,33 +145,21 @@ export const SystemConfig = () => {
                 {
                     selected.deleted && (
                         <>
-                            <DeleteUserScreen />
+                            <Grid item xs={12}>
+                                <DeleteUserScreen />
+                            </Grid>
                         </>
                     )
                 }
                 {
                     selected.help && (
                         <>
-                            <HelpUserScreen />
+                            <Grid item xs={12}>
+                                <HelpUserScreen />
+                            </Grid>
                         </>
                     )
                 }
-            </Grid>
-            <Grid 
-                item 
-                xs={1}
-            >
-                <HighlightOffIcon
-                    onClick={() => backToInit()}
-                    sx={{
-                        cursor: "pointer",
-                        fontSize: "4em",
-                        "&:hover": {
-                            color: "red",
-                            color: "red"
-                        }
-                    }}
-                />
             </Grid>
         </Grid>
     )

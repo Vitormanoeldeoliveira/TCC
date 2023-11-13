@@ -105,7 +105,9 @@ const HelpUserScreen = () => {
                     <Formik
                         initialValues={{ ...formValues }}
                         validationSchema={validation}
-                        onSubmit={(values) => handleSubmit(values)}
+                        onSubmit={
+                            (values, { resetForm }) => { handleSubmit(values); resetForm() }
+                        }
                     >
                         <Form>
                             <Grid container spacing={2} sx={{ p: 2 }} >
@@ -115,7 +117,7 @@ const HelpUserScreen = () => {
                                 >
                                     <Textfield 
                                         name="assunto"
-                                        label="Assunto"
+                                        placeholder="Assunto"
                                         contained={true}
                                     />
                                 </Grid>
@@ -125,7 +127,7 @@ const HelpUserScreen = () => {
                                 >
                                     <Textfield
                                         name="descricao"
-                                        label="descrição"
+                                        placeholder="descrição"
                                         contained={true}
                                         multiline={true}
                                     />

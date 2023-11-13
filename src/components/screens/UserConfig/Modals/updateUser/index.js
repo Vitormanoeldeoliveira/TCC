@@ -85,8 +85,19 @@ export const UpdateUser = (props) => {
         if(boolean[field] === false) {
           verifyRealUpdate = true
         }
+      } else if(field === "changePassEnable") {
+        if(boolean[field] === true) {
+          if(values.senha) {
+            verifyRealUpdate = true
+          }
+        }
       }
     };
+
+    setFormValues({
+      ...formValues,
+      loading: false
+    })
 
     if(verifyRealUpdate) {
       if(values.email !== decodedToken.email) {
@@ -274,7 +285,13 @@ export const UpdateUser = (props) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} >
+                <Grid 
+                  item 
+                  xs={12}
+                  sx={{
+                    display: boolean.changePassEnable ? "block" : "none"
+                  }}
+                >
                   <Textfield
                       name="senha"
                       size="small"
@@ -282,9 +299,6 @@ export const UpdateUser = (props) => {
                       label="Senha"
                       type={boolean.passwordView ? "text" : "password"}
                       autoComplete="off"
-                      sx={{
-                        display: boolean.changePassEnable ? "block" : "none"
-                      }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
@@ -301,23 +315,25 @@ export const UpdateUser = (props) => {
                         ),
                       }}               
                     />
+                </Grid>
+                <Grid item xs={12}>
                   <Typography
-                    onClick={() => ChangePass()}
-                    sx={{
-                      width: "10em",
-                      display: boolean.changePassEnable ? "none" : "block",
-                      textAlign: "center",
-                      ml: "auto",
-                      mr: "auto",
-                      cursor: "pointer",
-                      fontFamily: "FontePersonalizada",
-                      "&:hover": {
-                        color: "#52a0e3",
-                      }, 
-                    }} 
-                  >
-                    Trocar senha
-                  </Typography>
+                      onClick={() => ChangePass()}
+                      sx={{
+                        width: "10em",
+                        display: boolean.changePassEnable ? "none" : "block",
+                        textAlign: "center",
+                        ml: "auto",
+                        mr: "auto",
+                        cursor: "pointer",
+                        fontFamily: "FontePersonalizada",
+                        "&:hover": {
+                          color: "#52a0e3",
+                        }, 
+                      }} 
+                    >
+                      Trocar senha
+                    </Typography>
                 </Grid>
                 <Grid item xs={12} sx={{textAlign:"center"}} >
                   <Button

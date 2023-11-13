@@ -279,7 +279,7 @@ export const ModalProfit = (props) => {
                                     <Textfield
                                         name="gasto.insumo"
                                         numeric={true}
-                                        label="Valor investido em insumos"
+                                        label="Valor investido em defensivos"
                                     />
                                 </Grid>
                                 <Grid
