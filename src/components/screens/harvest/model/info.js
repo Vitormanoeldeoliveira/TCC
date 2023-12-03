@@ -38,7 +38,7 @@ export const ModalInfoHarvest = (props) => {
         },
         safra: {
             descricao: "",
-            data_safra: moment(new Date()).format("YYYY-MM-DD")
+            data_safra: new Date() //alerta
         }
     })
 
@@ -66,7 +66,7 @@ export const ModalInfoHarvest = (props) => {
             plantacao: {
                 descricao: isEdit?.plantacao?.descricao,
                 tipo: isEdit?.plantacao?.tipo,
-                data: moment(isEdit?.plantacao?.created_at).format("YYYY-MM-DD"),
+                data: moment(isEdit?.plantacao?.created_at).format("DD/MM/YYYY"), //alerta
                 cidade: isEdit?.plantacao?.cidade,
                 estado: isEdit?.plantacao?.uf,
                 area: isEdit?.plantacao?.area.toFixed(2).toString().replace('.', ',')
@@ -87,7 +87,7 @@ export const ModalInfoHarvest = (props) => {
             },
             safra: {
                 descricao: isEdit?.descricao,
-                data_safra: moment(isEdit?.data_safra).format("YYYY-MM-DD"),
+                data_safra: moment(isEdit?.data_safra).format("DD/MM/YYYY"),
             },
         })
     }

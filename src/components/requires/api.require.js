@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 //users requests
-export const GET_USERS = gql `
+export const GET_USERS = gql`
   query GetAllUsers ($filters: UserFilterInput!) {
     getAllUsers (filters: $filters){
       id
@@ -12,7 +12,21 @@ export const GET_USERS = gql `
   }
 `
 
-export const LOGIN_USER = gql `
+export const GET_USERS_SUPPORT = gql`
+  query GetAllUsers($filters: UserFilterInput!) {
+    getAllUsers(filters: $filters) {
+      id
+      nome
+      email
+      senha
+      avatar
+      excluido
+      created_at
+    }
+  }
+`
+
+export const LOGIN_USER = gql`
   query Login($filters: UserFilterInput!) {
     login(filters: $filters) {
       token
@@ -20,7 +34,7 @@ export const LOGIN_USER = gql `
   }
 `
 
-export const VALIDATE_PASSWORD = gql `
+export const VALIDATE_PASSWORD = gql`
   query ChangePassword($filters: UserFilterInput!) {
     changePassword(filters: $filters) {
       id
@@ -32,7 +46,7 @@ export const VALIDATE_PASSWORD = gql `
   }
 `
 
-export const UPDATE_TOKEN = gql `
+export const UPDATE_TOKEN = gql`
   query UpdateLogin($filters: UserFilterInput!) {
     updateLogin(filters: $filters) {
       token
@@ -40,7 +54,7 @@ export const UPDATE_TOKEN = gql `
   }
 `
 
-export const REAL_EMAIL = gql `
+export const REAL_EMAIL = gql`
   query Query($filters: EmailValidateCreateInput!) {
     getByCode(filters: $filters) {
       id
@@ -50,17 +64,16 @@ export const REAL_EMAIL = gql `
   }
 `
 
-export const CREATEVALIDATECODE = gql `
+export const CREATEVALIDATECODE = gql`
   mutation CreateEmailValidCode($data: UserValidateEmailInput!) {
     createEmailValidCode(data: $data) {
       id
-      codigo
       valido
     }
   }
 `
 
-export const UPDATE_EMAIL = gql `
+export const UPDATE_EMAIL = gql`
   mutation Mutation($data: EmailValidateUpdateInput!, $updateEmailValidCodeId: Float!) {
     updateEmailValidCode(data: $data, id: $updateEmailValidCodeId) {
       id
@@ -81,7 +94,7 @@ export const ADD_USER = gql`
   }
 `
 
-export const UPDATE_USER = gql `
+export const UPDATE_USER = gql`
   mutation UpdateUser($user: UserUpdateInput!, $updateUserId: Float!) {
     updateUser(user: $user, id: $updateUserId) {
       id
@@ -93,7 +106,7 @@ export const UPDATE_USER = gql `
 }
 `
 
-export const DELETE_USER = gql `
+export const DELETE_USER = gql`
   mutation DeleteUser($deleteUserId: Float!) {
     deleteUser(id: $deleteUserId) {
       id
@@ -124,6 +137,24 @@ export const GET_PLANTATIONS = gql`
         id
         descricao
       }
+    }
+  }
+`
+
+export const GET_PLANTATIONS_SUPORT = gql`
+  query GetAllPlantationsSuport {
+    getAllPlantationsSuport {
+      id
+      descricao
+      area
+      tipo
+      cep
+      cidade
+      uf
+      id_usuario
+      id_planta
+      created_at
+      excluido
     }
   }
 `
@@ -178,7 +209,7 @@ export const UPDATE_PLANTATIONS = gql`
   }
 `
 
-export const DEL_PLANTATIONS = gql `
+export const DEL_PLANTATIONS = gql`
   mutation DeletePlantation($deletePlantationId: Float!) {
     deletePlantation(id: $deletePlantationId) {
       id
@@ -221,7 +252,19 @@ export const GET_ALL_HARVESTS = gql`
   }
 `
 
-export const GET_ONE_HARVEST = gql `
+export const GET_ALL_HARVESTS_SUPORT = gql`
+  query GetAllPlantationsSuport {
+    getAllHarvestsSuport {
+      id
+      descricao
+      data_safra
+      id_plantacao
+      excluido
+    }
+  }
+`
+
+export const GET_ONE_HARVEST = gql`
   query GetOneHarvest($getOneHarvestId: Float!) {
     getOneHarvest(id: $getOneHarvestId) {
       id
@@ -293,7 +336,7 @@ export const DEL_HARVEST = gql`
   }
 `
 //gastos
-export const GET_HARVEST_EXPENSE = gql `
+export const GET_HARVEST_EXPENSE = gql`
 query GetAllHarvestExpense($filters: HarvestExpenseFilterInput!) {
   getAllHarvestExpense(filters: $filters) {
     id
@@ -326,7 +369,7 @@ query GetAllHarvestExpense($filters: HarvestExpenseFilterInput!) {
 }
 `
 
-export const CREATE_HARVEST_EXPENSE = gql `
+export const CREATE_HARVEST_EXPENSE = gql`
   mutation CreateHarvestExpense($harvestExpense: HarvestExpenseCreateInput!) {
     createHarvestExpense(harvestExpense: $harvestExpense) {
       id
@@ -345,7 +388,7 @@ export const CREATE_HARVEST_EXPENSE = gql `
   }
 `
 
-export const UPDATE_HARVEST_EXPENSE = gql `
+export const UPDATE_HARVEST_EXPENSE = gql`
   mutation UpdateHarvestExpense($updateHarvestExpenseId: Float!, $harvestExpense: HarvestExpenseUpdateInput!) {
     updateHarvestExpense(id: $updateHarvestExpenseId, harvestExpense: $harvestExpense) {
       id
@@ -360,7 +403,7 @@ export const UPDATE_HARVEST_EXPENSE = gql `
 `
 
 //lucros
-export const GET_PROFIT = gql `
+export const GET_PROFIT = gql`
   query GetAllProfit($filters: ProfitFilterInput!) {
     getAllProfit(filters: $filters) {
       id
@@ -404,7 +447,7 @@ export const GET_PROFIT = gql `
   }
 `
 
-export const CREATE_PROFIT = gql `
+export const CREATE_PROFIT = gql`
   mutation CreateProfit($profit: ProfitCreateInput!) {
     createProfit(Profit: $profit) {
       id
@@ -417,7 +460,7 @@ export const CREATE_PROFIT = gql `
   }
 `
 
-export const UPDATE_PROFIT = gql `
+export const UPDATE_PROFIT = gql`
   mutation UpdateProfit($updateProfitId: Float!, $profit: ProfitUpdateInput!) {
     updateProfit(id: $updateProfitId, Profit: $profit) {
       id
@@ -426,6 +469,26 @@ export const UPDATE_PROFIT = gql `
       periodo_venda
       id_gasto
       id_safra
+    }
+  }
+`
+
+//Planta
+
+export const GET_ALL_PLANT_SUPORT = gql`
+  query GetAllPlantationsSuport {
+    getAllPlantationsSuport {
+      id
+      descricao
+      area
+      tipo
+      cep
+      cidade
+      uf
+      id_usuario
+      id_planta
+      created_at
+      excluido
     }
   }
 `

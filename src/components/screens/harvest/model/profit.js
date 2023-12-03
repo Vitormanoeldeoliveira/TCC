@@ -1,5 +1,5 @@
 import { useMutation, } from "@apollo/client";
-import { Box, Button, DialogContent, Grid, Typography } from "@mui/material"
+import { Box, Button, DialogContent, Divider, Grid, Typography } from "@mui/material"
 import { differenceInDays, parseISO } from "date-fns";
 import { Form, Formik } from "formik"
 import moment from "moment";
@@ -12,11 +12,11 @@ import { autoDecodeToken } from "../../Login/token/decodeToken";
 
 export const ModalProfit = (props) => {
     const {
-        openModal, 
-        setOpenModal, 
-        refetchTableData, 
-        isEdit, 
-        valuesExpense, 
+        openModal,
+        setOpenModal,
+        refetchTableData,
+        isEdit,
+        valuesExpense,
         valuesProfit,
     } = props;
 
@@ -42,22 +42,23 @@ export const ModalProfit = (props) => {
             qtd_venda: "",
             valor_venda: "",
             periodo_venda: moment(new Date()).format("YYYY-MM-DD"),
-            tempo_total: moment(new Date()).format("YYYY-MM-DD"),
+            tempo_total: 0,
             lucro_dia: "",
         },
         lucroGasto: "",
-        loading: false
+        loading: false,
+        campoErro: false
     })
 
     useEffect(() => {
-        if(openModal.modalRenda) {
+        if (openModal.modalRenda) {
             setOpen(true);
 
             valueInsert()
         }
     }, [openModal.modalRenda]);
 
-    const handleClose = async() => {
+    const handleClose = async () => {
         await setOpen(false);
         setTimeout(() => {
             setOpenModal({
@@ -67,7 +68,7 @@ export const ModalProfit = (props) => {
         }, 1000);
     };
 
-    const valueInsert = async() => {
+    const valueInsert = async () => {
         const parsedDate1 = parseISO(valuesProfit?.data?.getAllProfit[0]?.periodo_venda);
         const parsedDate2 = parseISO(isEdit?.data_safra);
 
@@ -76,20 +77,59 @@ export const ModalProfit = (props) => {
         setFormValues({
             ...formValues,
             lucro: {
-                qtd_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
+                qtd_venda: !valuesProfit.data?.getAllProfit[0] ? ""
                     : valuesProfit.data.getAllProfit[0]?.qtd_venda,
-                valor_venda: !valuesProfit.data?.getAllProfit[0] ? "" 
+                valor_venda: !valuesProfit.data?.getAllProfit[0] ? ""
                     : valuesProfit.data.getAllProfit[0]?.valor_venda.toFixed(2).toString().replace('.', ','),
-                periodo_venda: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") 
+                periodo_venda: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD")
                     : moment(valuesProfit.data?.getAllProfit[0]?.periodo_venda).format("YYYY-MM-DD"),
-                tempo_total: !valuesProfit.data?.getAllProfit[0] ? moment(new Date()).format("YYYY-MM-DD") :
-                ( 
-                    daysDifference
-                ),
+                tempo_total: !valuesProfit.data?.getAllProfit[0] ? 0 :
+                    (
+                        daysDifference
+                    ),
                 lucro_dia: !valuesProfit.data?.getAllProfit[0] ? "" :
-                ( 
-                    ((
-                        valuesProfit.data.getAllProfit[0]?.qtd_venda * 
+                    (
+                        ((
+                            valuesProfit.data.getAllProfit[0]?.qtd_venda *
+                            valuesProfit.data.getAllProfit[0]?.valor_venda
+                        ) - (
+                                valuesExpense.data.getAllHarvestExpense[0]?.preco_adubo +
+                                valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario +
+                                valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos +
+                                valuesExpense.data.getAllHarvestExpense[0]?.valor_inicial +
+                                (
+                                    (
+                                        valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalho *
+                                        valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalhada
+                                    ) * (
+                                        (
+                                            daysDifference
+                                        )
+                                    )
+                                )
+                            )) / (
+                            daysDifference
+                        )
+                    ).toFixed(2).toString().replace('.', ','),
+            },
+            gasto: {
+                adubo: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo.toFixed(2).toString().replace('.', ','),
+                insumo: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_insumos.toFixed(2).toString().replace('.', ','),
+                calcario: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario.toFixed(2).toString().replace('.', ','),
+                inicial: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial.toFixed(2).toString().replace('.', ','),
+                hora_trabalhada: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalhada.toFixed(2).toString().replace('.', ','),
+                hora_trabalho: !valuesExpense.data?.getAllHarvestExpense[0] ? ""
+                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalho.toFixed(2).toString().replace('.', ',')
+            },
+            lucroGasto: !valuesProfit.data?.getAllProfit[0] ? "" :
+                (
+                    (
+                        valuesProfit.data.getAllProfit[0]?.qtd_venda *
                         valuesProfit.data.getAllProfit[0]?.valor_venda
                     ) - (
                         valuesExpense.data.getAllHarvestExpense[0]?.preco_adubo +
@@ -97,64 +137,42 @@ export const ModalProfit = (props) => {
                         valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos +
                         valuesExpense.data.getAllHarvestExpense[0]?.valor_inicial +
                         (
-                            (
-                                valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalho *
-                                valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalhada
-                            ) * (
-                                (
-                                    daysDifference
-                                )
-                            )
+                            valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalho *
+                            valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalhada
+                        ) * (
+                            daysDifference
                         )
-                    )) / (
-                        daysDifference
                     )
-                ).toFixed(2).toString().replace('.', ','),
-            },
-            gasto: {
-                adubo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_adubo.toFixed(2).toString().replace('.', ','),
-                insumo: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.preco_insumos.toFixed(2).toString().replace('.', ','),
-                calcario: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario.toFixed(2).toString().replace('.', ','),
-                inicial: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense.data?.getAllHarvestExpense[0]?.valor_inicial.toFixed(2).toString().replace('.', ','),
-                hora_trabalhada: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalhada.toFixed(2).toString().replace('.', ','),
-                hora_trabalho: !valuesExpense.data?.getAllHarvestExpense[0] ? "" 
-                    : valuesExpense?.data?.getAllHarvestExpense[0]?.hora_trabalho.toFixed(2).toString().replace('.', ',') 
-            },
-            lucroGasto: !valuesProfit.data?.getAllProfit[0] ? "" :
-            (
-                (
-                    valuesProfit.data.getAllProfit[0]?.qtd_venda * 
-                    valuesProfit.data.getAllProfit[0]?.valor_venda
-                ) - (
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_adubo +
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_calcario +
-                    valuesExpense.data.getAllHarvestExpense[0]?.preco_insumos +
-                    valuesExpense.data.getAllHarvestExpense[0]?.valor_inicial +
-                    (
-                        valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalho *
-                        valuesExpense.data.getAllHarvestExpense[0]?.hora_trabalhada
-                    ) * (
-                        daysDifference
-                    )
-                )
-            ).toFixed(2).toString().replace('.', ',')
+                ).toFixed(2).toString().replace('.', ',')
         })
     }
 
-    const handleSubmit = async(values) => {
+    const handleSubmit = async (values) => {
         setFormValues({
             ...formValues,
-            loading: true
-        })
+            loading: true,
+        });
+
+        const parsedDate1 = parseISO(values.lucro.periodo_venda);
+        const parsedDate2 = parseISO(isEdit?.data_safra);
+
+        const daysDifference = Math.abs(differenceInDays(parsedDate2, parsedDate1));
+
+        // if (Number(daysDifference) <= 0) {
+        if (
+            values.lucro.periodo_venda <= isEdit?.data_safra
+        ) {
+            setFormValues({
+                ...formValues,
+                loading: false,
+                campoErro: true
+            })
+            return
+        }
 
         const dataExpense = values.gasto
         const dataProfit = values.lucro
-        
+
         const harvestExpense = {
             id_safra: Number(isEdit?.id),
             preco_adubo: Number(dataExpense?.adubo.replace(',', '.')),
@@ -173,14 +191,14 @@ export const ModalProfit = (props) => {
             id_usuario: Number(decodedToken?.id)
         }
 
-        if(!valuesExpense.data?.getAllHarvestExpense[0]) {
+        if (!valuesExpense.data?.getAllHarvestExpense[0]) {
             try {
                 const idExpense = await addHarvestExpense({
                     variables: { harvestExpense }
                 })
 
                 await addProfit({
-                    variables: { 
+                    variables: {
                         profit: {
                             ...profit,
                             id_gasto: Number(idExpense.data.createHarvestExpense?.id)
@@ -197,7 +215,7 @@ export const ModalProfit = (props) => {
         } else {
             const idExpense = Number(valuesExpense.data.getAllHarvestExpense[0]?.id)
             const idProfit = Number(valuesProfit.data.getAllProfit[0]?.id)
-            
+
             try {
                 await updateHarvestExpense({
                     variables: {
@@ -227,16 +245,16 @@ export const ModalProfit = (props) => {
         toast.success("Dados salvos com sucesso")
         refetchTableData()
         handleClose()
-        const novaURL = 'http://localhost:3000/harvest'
-        window.location.href = novaURL;
+        // const novaURL = 'http://localhost:3000/harvest'
+        // window.location.href = novaURL;
     }
 
     return (
         <>
             <BootstrapDialog open={open} fullWidth={true} maxWidth="lg" >
-                <BootstrapDialogTitle 
-                    id="customized-dialog-title" 
-                    onClose={handleClose} 
+                <BootstrapDialogTitle
+                    id="customized-dialog-title"
+                    onClose={handleClose}
                     sx={{
                         bgcolor: "#da8f73",
                         color: "white"
@@ -255,23 +273,41 @@ export const ModalProfit = (props) => {
                     </Box>
                 </BootstrapDialogTitle>
                 <DialogContent>
-                        <Formik
-                            initialValues={{ ...formValues }}
-                            // validationSchema={validation}
-                            onSubmit={(values) => handleSubmit(values)}
-                        >
-                            <Form>
-                                <Grid container spacing={2} sx={{ py: 2 }} >                                
-                                    <Grid
-                                        item
-                                        xs={12} md={6}
+                    <Formik
+                        initialValues={{ ...formValues }}
+                        // validationSchema={validation}
+                        onSubmit={(values) => handleSubmit(values)}
+                    >
+                        <Form>
+                            <Grid container spacing={2} sx={{ py: 2 }} >
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
                                     >
-                                        <Textfield
-                                            name="gasto.adubo"
-                                            numeric={true}
-                                            label="Valor investido em adubo"
-                                        />
-                                    </Grid>
+                                        Investimento
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12} md={6}
+                                >
+                                    <Textfield
+                                        name="gasto.adubo"
+                                        numeric={true}
+                                        label="Gastos em adubo"
+                                    />
+                                </Grid>
                                 <Grid
                                     item
                                     xs={12} md={6}
@@ -279,7 +315,7 @@ export const ModalProfit = (props) => {
                                     <Textfield
                                         name="gasto.insumo"
                                         numeric={true}
-                                        label="Valor investido em defensivos"
+                                        label="Gastos em defensivos"
                                     />
                                 </Grid>
                                 <Grid
@@ -289,8 +325,36 @@ export const ModalProfit = (props) => {
                                     <Textfield
                                         name="gasto.calcario"
                                         numeric={true}
-                                        label="Valor investido em calcario"
+                                        label="Gastos em calcario"
                                     />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12} md={6}
+                                >
+                                    <Textfield
+                                        name="gasto.inicial"
+                                        numeric={true}
+                                        label="Gasto inicial"
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Funcionário (opicional)
+                                    </Typography>
+                                    <Divider />
                                 </Grid>
                                 <Grid
                                     item
@@ -314,12 +378,43 @@ export const ModalProfit = (props) => {
                                 </Grid>
                                 <Grid
                                     item
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Vendas
+                                    </Typography>
+                                    <Divider />
+                                </Grid>
+                                <Grid
+                                    item
                                     xs={12} md={6}
                                 >
                                     <Textfield
-                                        name="gasto.inicial"
-                                        numeric={true}
-                                        label="Valor inicial investido"
+                                        name="lucro.periodo_venda"
+                                        type="Date"
+                                        label="Fim da colheita"
+                                        error={formValues.campoErro}
+                                        setError={setFormValues}
+                                        helperText={formValues.campoErro ? "Data Inválida" : ""}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12} md={6}
+                                >
+                                    <Textfield
+                                        name="lucro.tempo_total"
+                                        disabled
+                                        label="Periodo de tempo(dias)"
                                     />
                                 </Grid>
                                 <Grid
@@ -344,23 +439,21 @@ export const ModalProfit = (props) => {
                                 </Grid>
                                 <Grid
                                     item
-                                    xs={12} md={6}
+                                    xs={12}
+                                    sx={{
+                                        mt: '1em'
+                                    }}
                                 >
-                                    <Textfield
-                                        name="lucro.periodo_venda"
-                                        type="Date"
-                                        label="Fim da colheita"
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={12} md={6}
-                                >
-                                    <Textfield
-                                        name="lucro.tempo_total"
-                                        disabled
-                                        label="Periodo de tempo"
-                                    />
+                                    <Typography
+                                        sx={{
+                                            color: "gray",
+                                            textAlign: "center",
+                                            fontFamily: "FontePersonalizada"
+                                        }}
+                                    >
+                                        Lucro geral
+                                    </Typography>
+                                    <Divider />
                                 </Grid>
                                 <Grid
                                     item
@@ -382,11 +475,11 @@ export const ModalProfit = (props) => {
                                         label="Lucro Total Obtido"
                                         disabled
                                         sx={{
-                                            color: formValues.lucroGasto > 0 ? "green" : "red"
+                                            color: formValues.lucroGasto >= 0 ? "green" : "red"
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sx={{textAlign:"center"}} >
+                                <Grid item xs={12} sx={{ textAlign: "center" }} >
                                     <Button
                                         variant="cointaned"
                                         type="submit"
@@ -409,7 +502,7 @@ export const ModalProfit = (props) => {
                     </Formik>
                 </DialogContent>
             </BootstrapDialog>
-            <div><Toaster/></div>
+            <div><Toaster /></div>
         </>
     )
 }

@@ -72,11 +72,6 @@ export const Harvest = () => {
         }
     }, [boolean.deleteConfirmed])
 
-    const [valueLucroGasto, setValueLucroGasto] = useState({
-        lucro: "",
-        gasto: ""
-    })
-
     const {data, refetch} = useQuery(GET_ALL_HARVESTS, {
         variables: {
             filters: {
@@ -150,6 +145,8 @@ export const Harvest = () => {
                     }
                 }
             })
+
+            console.log(expense);
 
             setBoolean({
                 ...boolean,

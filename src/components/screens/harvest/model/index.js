@@ -20,7 +20,7 @@ export const ModalHarvest = (props) => {
 
     const [formValues, setFormValues] = useState({
         descricao: "",
-        data_safra: moment(new Date()).format("YYYY-MM-DD"),
+        data_safra: moment(new Date()).format("YYYY-MM-DD"), //alerta
         loading: false
     })
 

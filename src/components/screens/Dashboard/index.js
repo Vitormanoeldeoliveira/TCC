@@ -126,7 +126,7 @@ const BarChartComponent = () => {
                                                 fontWeight: 700
                                             }}
                                         >
-                                            Seja bem vindo, { decodedToken.nome }
+                                            Seja bem-vindo, { decodedToken.nome }
                                         </Typography>
                                         <Typography
                                             sx={{
@@ -239,7 +239,7 @@ const BarChartComponent = () => {
                                                         fontWeight: 700
                                                     }}
                                                 >
-                                                    Seja bem vindo, { decodedToken.nome }
+                                                    Seja bem-vindo, { decodedToken.nome }
                                                 </Typography>
                                                 <Typography
                                                     sx={{
