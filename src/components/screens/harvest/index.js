@@ -7,14 +7,13 @@ import { useEffect, useState } from "react";
 import { Navbar } from "../../ourComponents/Navbar";
 
 import { DEL_HARVEST, GET_ALL_HARVESTS, GET_HARVEST_EXPENSE, GET_ONE_HARVEST, GET_PROFIT } from "../../requires/api.require";
-import { ModalHarvest } from "./model";
-import { ModalInfoHarvest } from "./model/info";
-import { ModalProfit } from "./model/profit";
+import { ModalHarvest } from "./modal";
 
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Delete } from "../../deleteConfirm";
 import { toast, Toaster } from "react-hot-toast";
+import { TabsModal } from "./modal/profitAndInfo";
 
 export const Harvest = () => {
     //Criptografia do id_plantação
@@ -42,7 +41,6 @@ export const Harvest = () => {
     const [boolean, setBoolean] = useState({
         modalHarvest: false,
         modalInfo: false,
-        modalRenda: false,
         modalDelete: false,
         deleteConfirmed: false,
         idToDelete: "",
@@ -122,38 +120,6 @@ export const Harvest = () => {
               ...boolean,
               modalHarvest: true,
               valuesEdit: data.data.getOneHarvest
-            })
-        } else if (ev === "GastoLucro") {
-            const data = await getOneHarvest({
-                variables: {
-                    getOneHarvestId: Number(id)
-                }
-            })
-
-            const expense = await getHarvestExpense({
-                variables: {
-                    filters: {
-                        id_safra: Number(id)
-                    }
-                }
-            })
-
-            const profit = await getProfit({
-                variables: {
-                    filters: {
-                        id_safra: Number(id)
-                    }
-                }
-            })
-
-            console.log(expense);
-
-            setBoolean({
-                ...boolean,
-                modalRenda: true,
-                valuesEdit: data.data.getOneHarvest,
-                valuesExpense: expense ? expense : "",
-                valuesProfit: profit ? profit : ""
             })
         } else {
             const data = await getOneHarvest({
@@ -433,9 +399,10 @@ export const Harvest = () => {
                                     >
                                         <Box
                                             sx={{
+                                                width: "100%",
                                                 display: "inline-flex",
+                                                justifyContent: "space-between",
                                                 mt: "0.5em",
-                                                gap: "2em",
                                                 textAlign: "center"
                                             }}
                                         >
@@ -445,6 +412,7 @@ export const Harvest = () => {
                                                     cursor: "pointer",
                                                     fontFamily: "FontePersonalizada",
                                                     textAlign: "center",
+                                                    ml: 3, 
                                                     "&:hover": {
                                                         color: "#e3e3e1"
                                                     }
@@ -452,26 +420,14 @@ export const Harvest = () => {
                                                 value="View"
                                                 onClick={() => UpdateOrView("View", safra.id)}
                                             >
-                                                Dados
-                                            </Typography>
-                                            <Typography
-                                                sx={{
-                                                    color: "#76a79c",
-                                                    cursor: "pointer",
-                                                    "&:hover": {
-                                                        color: "#889c9b",
-                                                    },
-                                                }}
-                                                value="Edit"
-                                                onClick={() => UpdateOrView("GastoLucro", safra.id)}
-                                            >
-                                                Renda
+                                                Dados da safra
                                             </Typography>
                                             <Typography
                                                 sx={{
                                                     color: "#da8f73",
                                                     cursor: "pointer",
                                                     fontFamily: "FontePersonalizada",
+                                                    mr: 3,
                                                     "&:hover": {
                                                         color: "#c78469"
                                                     }
@@ -501,25 +457,13 @@ export const Harvest = () => {
             )}
 
             {boolean.modalInfo && (
-                <ModalInfoHarvest
+                <TabsModal
                     openModal={boolean}
                     setOpenModal={setBoolean}
                     refetchTableData={refetchTableData}
-                    isEdit={boolean?.valuesEdit}
+                    isEdit={boolean}
                     // valuesExpense={boolean?.valuesExpense}
                     // valuesProfit={boolean?.valuesProfit}
-                    decript={decript}
-                />
-            )}
-
-            {boolean.modalRenda && (
-                <ModalProfit
-                    openModal={boolean}
-                    setOpenModal={setBoolean}
-                    refetchTableData={refetchTableData}
-                    isEdit={boolean.valuesEdit}
-                    valuesExpense={boolean.valuesExpense}
-                    valuesProfit={boolean.valuesProfit}
                     decript={decript}
                 />
             )}

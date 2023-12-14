@@ -160,11 +160,11 @@ export const ModalHarvest = (props) => {
                                         disabled={formValues.loading}
                                         type="submit"
                                         sx={{
-                                            backgroundColor: "#9abadb",
+                                            backgroundColor: "#5E86DB",
                                             color: "white",
                                             borderColor: "#b4cfce",
                                             "&:hover": {
-                                                backgroundColor: "#9adbb5",
+                                                backgroundColor: "#4E6FB5",
                                                 borderColor: "#b4cfce"
                                             }
                                         }}

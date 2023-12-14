@@ -63,7 +63,7 @@ const RegisterScreen = (props) => {
   const validation = Yup.object().shape({
     nome: Yup.string().required("Campo obrigatório"),
     email: Yup.string().email("Preencha corretamente").required("Campo obrigatório"),
-    senha: Yup.string().required("Campo obrigatório"),
+    senha: Yup.string().required("Campo obrigatório").min(8, "mínimo 8 caracteres"),
   });
 
   const [passwordView, setPasswordView] = useState(false)

@@ -290,7 +290,8 @@ const UserForm = () => {
         >
           <Box 
             sx={{
-              display: "inline-flex"
+              display: "inline-flex",
+              gap: 0.6
             }}
           >
             <Typography 

@@ -1,0 +1,24 @@
+.rec-dot_active {
+    background-color: #79a59c !important;
+    box-shadow: 0 0 1px 3px #79a59c !important;
+}
+.rec-dot:focus,
+.rec-dot:hover {
+    box-shadow: 0 0 1px 3px #79a59c !important;
+}
+.rec-dot_active:focus,
+.rec-dot_active:hover {
+    background-color: 0 0 1px 3px #79a59c !important;
+    box-shadow: 0 0 1px 3px gray !important;
+}
+.rec-arrow {
+    background-color: transparent !important;
+    box-shadow: 0 0 1px 3px transparent !important;
+    transition: all 0.3s ease;
+    color: #79a59c  !important;
+}
+.rec-arrow:hover:not(:disabled) {
+    transform: scale(1.2);
+    background-color: #79a59c !important;
+    color: white !important;
+}

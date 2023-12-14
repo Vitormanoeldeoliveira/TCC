@@ -63,7 +63,8 @@ const DeleteUserScreen = () => {
                 <Grid item xs={12} >
                     <Typography
                         sx={{
-                            fontFamily: 'FontePersonlizada',
+                            fontFamily: "FontePersonalizada",
+                            fontWeight: 700,
                             fontSize: "2em"
                         }}
                     >
@@ -80,7 +81,7 @@ const DeleteUserScreen = () => {
                 >
                     <Typography
                         sx={{
-                            fontFamily: 'FontePersonlizada',
+                            fontFamily: "FontePersonalizada",
                             fontSize: "3em"
                         }}
                     >
@@ -88,7 +89,7 @@ const DeleteUserScreen = () => {
                     </Typography>
                     <Typography
                         sx={{
-                            fontFamily: 'FontePersonlizada',
+                            fontFamily: "FontePersonalizada",
                             fontSize: "3em"
                         }}
                     >
@@ -96,7 +97,7 @@ const DeleteUserScreen = () => {
                     </Typography>
                     <Typography
                         sx={{
-                            fontFamily: 'FontePersonlizada',
+                            fontFamily: "FontePersonalizada",
                             fontSize: "1.4em"
                         }}
                     >

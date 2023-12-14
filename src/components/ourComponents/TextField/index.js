@@ -9,7 +9,7 @@ const Textfield = ({ name, setError, cepFormat, numeric, contained, multiline, r
    const [field, meta] = useField(name);
 
    const handleChange = (event) => {
-      if(otherProps.error){
+      if (otherProps.error) {
          setError({
             [otherProps.error]: false
          })
@@ -17,12 +17,12 @@ const Textfield = ({ name, setError, cepFormat, numeric, contained, multiline, r
 
       let data = event.target.value;
 
-      if(cepFormat && data.length == 8) {
+      if (cepFormat && data.length == 8) {
          data = data.replace(/\D/g, '');
          data = data.replace(/^(\d{5})(\d{0,3})/, '$1-$2');
       }
 
-      if(numeric) {
+      if (numeric) {
          data = data.replace(/[^0-9.]/g, '');
 
          if (data.length > 2) {
@@ -32,23 +32,23 @@ const Textfield = ({ name, setError, cepFormat, numeric, contained, multiline, r
 
       return setFieldValue(name, data);
    };
-    const configTextField = {
-        ...field,
-        ...otherProps,
-        fullWidth: true,
-        variant: contained ? !multiline ? "outlined" : "filled" : "standard",
-         multiline: multiline ? true : false,
-         rows: multiline && 6,
-        onChange: handleChange,
-    };
+   const configTextField = {
+      ...field,
+      ...otherProps,
+      fullWidth: true,
+      variant: contained ? !multiline ? "outlined" : "filled" : "standard",
+      multiline: multiline ? true : false,
+      rows: multiline && 6,
+      onChange: handleChange,
+   };
 
    if (meta.error) {
       configTextField.error = true;
       configTextField.helperText = meta.error;
    }
 
-   return <TextField 
-      size="small" 
+   return <TextField
+      size="small"
       autoComplete="off"
       {...configTextField}
       sx={{

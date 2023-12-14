@@ -64,7 +64,7 @@ export const ModalPlantations = (props) => {
         'Milho', 
         'Soja', 
         'Feijão', 
-        'Melância', 
+        'Melancia', 
         'Café', 
         'Alface', 
         'Repolho', 
@@ -160,7 +160,7 @@ export const ModalPlantations = (props) => {
                         autoComplete === "Milho" ? 1 :
                             autoComplete === "Soja" ? 2 :
                                 autoComplete === "Feijão" ? 3 :
-                                    autoComplete === "Melância" ? 4 :
+                                    autoComplete === "Melancia" ? 4 :
                                         autoComplete === "Café" ? 5 :
                                             autoComplete === "Alface" ? 6 :
                                                 autoComplete === "Repolho" ? 7 : 8,
@@ -249,7 +249,7 @@ export const ModalPlantations = (props) => {
                         <Typography
                             fontSize="1em"
                         >
-                            {!isEdit ? "Cadatro de Plantação" : "Edição de Plantação"}
+                            {!isEdit ? "Cadastro de Plantação" : "Edição de Plantação"}
                         </Typography>
                         <YardIcon sx={{ fontSize: "1.3em", ml: "0.2em" }} />
                     </Box>
